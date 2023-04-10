@@ -5,6 +5,9 @@
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
+
+// ! Will replace with posts API routing
+
 const express = require('express');
 const router  = express.Router();
 const userQueries = require('../db/queries/users');
