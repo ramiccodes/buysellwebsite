@@ -7,64 +7,46 @@
 
   <body>
     <%- include('partials/_header') %>
-    <div class="content-wrapper">
-      <form class="row g-3 py-5">
+    <div class="d-flex flex-column gap-2 p-2">
+      <form class="row g-2">
         <div class="mb-3">
-          <label for="formFile" class="form-label">Default file input example</label>
-          <input class="form-control" type="file" id="formFile">
+          <label for="formFile" class="form-label d-none"
+            >Default file input example</label
+          >
+          <input class="form-control" type="file" id="formFile" />
         </div>
 
-        <div class="col-md-6">
-          <label for="inputTitle" class="form-label">Title</label>
-          <input type="text" class="form-control" id="inputTitle" />
-        </div>
-        <div class="col-md-6">
-          <label for="inputPrice" class="form-label">Price</label>
-          <input type="number" class="form-control" id="inputPrice" />
-        </div>
-        <div class="col-12">
-          <label for="inputAddress2" class="form-label">Address 2</label>
+        <div class="form-floating">
           <input
             type="text"
             class="form-control"
-            id="inputAddress2"
-            placeholder="Apartment, studio, or floor"
+            id="input-title"
+            placeholder="Title"
           />
+          <label for="input-title">Title</label>
         </div>
-        <div class="col-12">
-          <label for="inputAddress2" class="form-label">Address 2</label>
+
+        <div class="form-floating">
           <input
             type="text"
             class="form-control"
-            id="inputAddress2"
-            placeholder="Apartment, studio, or floor"
+            id="input-price"
+            placeholder="Price"
           />
+          <label for="input-title">Price</label>
         </div>
-        <div class="col-md-6">
-          <label for="inputCity" class="form-label">City</label>
-          <input type="text" class="form-control" id="inputCity" />
+
+        <div>
+          <textarea
+            type="text"
+            class="form-control"
+            id="textarea-description"
+            placeholder="Add description to your listing..."
+          ></textarea>
         </div>
-        <div class="col-md-4">
-          <label for="inputState" class="form-label">State</label>
-          <select id="inputState" class="form-select">
-            <option selected>Choose...</option>
-            <option>...</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label for="inputZip" class="form-label">Zip</label>
-          <input type="text" class="form-control" id="inputZip" />
-        </div>
-        <div class="col-12">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck" />
-            <label class="form-check-label" for="gridCheck">
-              Check me out
-            </label>
-          </div>
-        </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Sign in</button>
+
+        <div class="w-100">
+          <button type="submit" class="btn btn-primary w-100">Create post</button>
         </div>
       </form>
     </div>
