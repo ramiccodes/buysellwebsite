@@ -7,10 +7,10 @@
 
   <body>
     <%- include('partials/_header') %>
+    <div class="d-flex flex-column gap-2 p-2">
 
-    <div class="content-wrapper">
       <!-- Searchbar  -->
-      <div class="searchbar w-100 d-flex align-items-center gap-3 py-5 pb-2">
+      <div class="searchbar w-100 d-flex align-items-center gap-3 pb-2">
         <form class="form-floating w-100">
           <div class="input-group">
             <span class="input-group-text" id="basic-addon1">
@@ -23,14 +23,18 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Searcch for items"
+              placeholder="Search for items"
             />
           </div>
         </form>
         <div class="btn-group">
           <button
             type="button"
-            id="filter-btn"
+            data-bs-toggle="collapse"
+            data-bs-target="#filter-form"
+            aria-controls="filter-form"
+            aria-expanded="false"
+            aria-label="Toggle filter form"
             class="btn btn-primary dropdown-toggle"
           >
             <i role="button" class="fa-solid fa-filter"></i>
@@ -39,10 +43,10 @@
       </div>
 
       <!-- Filter form, opens on filter btn press -->
-      <ul class="filter-form p-0" id="filter-form">
+      <ul class="collapse p-0" id="filter-form">
         <div class="d-flex gap-2">
           <div class="col">
-            <input type="text" class="form-control" placeholder="Min price" />
+            <input type="text" class="form-control input-dark" placeholder="Min price" />
           </div>
           <div class="col">
             <input type="text" class="form-control" placeholder="Max price" />
