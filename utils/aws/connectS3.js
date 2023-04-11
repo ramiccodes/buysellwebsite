@@ -1,3 +1,5 @@
+const AWS = require("aws-sdk");
+
 AWS.config.update({
   region: "us-west-2",
   accessKeyId: "AKIA53K53QWGCRDKRTFT",
