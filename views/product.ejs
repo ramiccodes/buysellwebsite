@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="/styles/product.css" type="text/css" />
+
+    <title>Product Page</title>
+    <%- include('partials/_meta') %>
+    
+  </head>
+  <body>
+    <%- include('partials/_header') %>
+    <div class="container mt-5">
+
+      <div class="row justify-content-center">
+
+      <h1 class="mb-4">Product Title</h1>
+        <div class="col-md-6">
+          <div class="image-container">
+            <div class="square-image">
+              <img src="/images/productsample.jpg" alt="Product Image" class="img-fluid rounded">
+            </div>
+            <button class="favorite-btn">
+              <i class="fas fa-heart fa-2x"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <div>
+              <h3>Description:</h3>
+              <p>Gotta catch em' all.</p>
+            </div>
+            <div class="ms-auto">
+              <h3>Price:</h3>
+              <p>$99.95</p>
+            </div>
+          </div>
+          <form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Contact Owner</label>
+              <input type="email" class="form-control" id="email" placeholder="name@example.com">
+            </div>
+            <div class="input-group">
+              <textarea class="form-control" placeholder="message to seller"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Send Email</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+  </body>
+</html>
