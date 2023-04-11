@@ -10,12 +10,12 @@
 
 const express = require('express');
 const router  = express.Router();
-const userQueries = require('../db/queries/users');
+const productQueries = require('../db/queries/products');
 
 router.get('/', (req, res) => {
-  userQueries.getUsers()
-    .then(users => {
-      res.json({ users });
+  productQueries.getProducts()
+    .then(products => {
+      res.json({ products });
     })
     .catch(err => {
       res
