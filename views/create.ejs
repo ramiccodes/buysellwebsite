@@ -8,12 +8,12 @@
   <body>
     <%- include('partials/_header') %>
     <div class="d-flex flex-column gap-2 p-2">
-      <form class="row g-2">
+      <form id="create-product" class="row g-2">
         <div class="mb-3">
-          <label for="formFile" class="form-label d-none"
+          <label for="upload-image" class="form-label d-none"
             >Default file input example</label
           >
-          <input class="form-control" type="file" id="formFile" />
+          <input class="form-control" type="file" id="upload-image" />
         </div>
 
         <div class="form-floating">
@@ -46,7 +46,9 @@
         </div>
 
         <div class="w-100">
-          <button type="submit" class="btn btn-primary w-100">Create post</button>
+          <button type="submit" class="btn btn-primary w-100">
+            Create post
+          </button>
         </div>
       </form>
     </div>
