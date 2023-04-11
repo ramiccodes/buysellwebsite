@@ -15,34 +15,66 @@
         background: transparent;
         border: none;
       }
+
+      .square-image {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .square-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+      }
     </style>
   </head>
   <body>
     <%- include('partials/_header') %>
     <div class="container mt-5">
+
+      <div class="row justify-content-center">
+
       <h1 class="mb-4">Product Title</h1>
-      <div class="col">
-        
-        <div class="image-container">
-          <img src="/images/productsample.jpg" alt="Product Image" class="img-fluid">
-          <button class="favorite-btn">
-            <i class="fas fa-heart"></i>
-          </button>
+        <div class="col-md-6">
+          <div class="image-container">
+            <div class="square-image">
+              <img src="/images/productsample.jpg" alt="Product Image" class="img-fluid rounded">
+            </div>
+            <button class="favorite-btn">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
         </div>
-        
         <div class="col-md-6">
           <div class="d-flex align-items-center">
             <div>
               <h3>Description:</h3>
-              <p>Product description goes here. Brand new skateboard, only rode twice.</p>
+              <p>Gotta catch em' all.</p>
             </div>
             <div class="ms-auto">
               <h3>Price:</h3>
               <p>$99.95</p>
             </div>
           </div>
+          <form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Contact Owner</label>
+              <input type="email" class="form-control" id="email" placeholder="name@example.com">
+            </div>
+            <div class="input-group">
+              <textarea class="form-control" placeholder="message to seller"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+          </form>
         </div>
       </div>
+
+    </div>
+
     </div>
   </body>
 </html>
