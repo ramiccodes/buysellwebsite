@@ -7,50 +7,91 @@
 
   <body>
     <%- include('partials/_header') %>
-    <div class="d-flex flex-column gap-2 p-2">
-      <form id="create-product" class="row g-2">
-        <div class="mb-3">
-          <label for="upload-image" class="form-label d-none"
-            >Default file input example</label
-          >
-          <input class="form-control" type="file" id="upload-image" />
-        </div>
+    <section>
+      <main class="d-flex flex-column flex-md-row gap-4 p-2">
+        <!-- Render card as you create the post -->
+        <div class="bg-dark w-100"></div>
 
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="input-title"
-            placeholder="Title"
-          />
-          <label for="input-title">Title</label>
-        </div>
-
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="input-price"
-            placeholder="Price"
-          />
-          <label for="input-title">Price</label>
-        </div>
-
-        <div>
-          <textarea
-            type="text"
-            class="form-control"
-            id="textarea-description"
-            placeholder="Add description to your listing..."
-          ></textarea>
-        </div>
-
+        <!-- Form -->
         <div class="w-100">
-          <button type="submit" class="btn btn-primary w-100">
-            Create post
-          </button>
+          <header class="my-2">
+            <h1 class="h3">Create listing</h1>
+            <hr />
+          </header>
+
+          <form
+            id="create-product"
+            class="d-flex flex-column gap-2 needs-validated"
+            novalidate
+          >
+            <div>
+              <label for="upload-image" class="form-label d-none"
+                >Default file input example</label
+              >
+              <input
+                class="form-control"
+                accept="image/png, image/jpeg"
+                type="file"
+                id="upload-image"
+                required
+              />
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+              <div class="invalid-feedback">
+                Please upload an image
+              </div>
+            </div>
+
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                placeholder="Title"
+                required
+              />
+              <label for="title">Title</label>
+              <div class="invalid-feedback">
+                Please choose a title
+              </div>
+            </div>
+
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="price"
+                placeholder="Price"
+                required
+              />
+              <label for="title">Price</label>
+              <div class="invalid-feedback">
+                Please choose a price
+              </div>
+            </div>
+
+            <div>
+              <textarea
+                type="text"
+                class="form-control"
+                id="description"
+                placeholder="Add description to your listing..."
+                required
+              ></textarea>
+              <div class="invalid-feedback">
+                Please choose a description
+              </div>
+            </div>
+
+            <div class="w-100">
+              <button type="submit" class="btn btn-primary w-100">
+                Create post
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      </main>
+    </section>
   </body>
 </html>
