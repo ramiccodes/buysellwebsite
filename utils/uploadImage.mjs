@@ -1,7 +1,7 @@
 // handles the upload logic, and connects to S3
-const uploadImage = (file) => {
+export const uploadImage = (file) => {
   const params = {
-    Bucket: "greglist",
+    Bucket: process.env.AWS_BUCKET,
     Key: file.name,
     Body: file,
     ContentType: file.type,
@@ -15,5 +15,3 @@ const uploadImage = (file) => {
     }
   });
 };
-
-module.exports = { uploadImage };

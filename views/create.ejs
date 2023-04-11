@@ -35,12 +35,8 @@
                 id="upload-image"
                 required
               />
-              <div class="valid-feedback">
-                Looks good!
-              </div>
-              <div class="invalid-feedback">
-                Please upload an image
-              </div>
+              <div class="valid-feedback">Looks good!</div>
+              <div class="invalid-feedback">Please upload an image</div>
             </div>
 
             <div class="form-floating">
@@ -52,9 +48,7 @@
                 required
               />
               <label for="title">Title</label>
-              <div class="invalid-feedback">
-                Please choose a title
-              </div>
+              <div class="invalid-feedback">Please choose a title</div>
             </div>
 
             <div class="form-floating">
@@ -62,13 +56,12 @@
                 type="text"
                 class="form-control"
                 id="price"
+                pattern="^[1-9]\d*$"
                 placeholder="Price"
                 required
               />
               <label for="title">Price</label>
-              <div class="invalid-feedback">
-                Please choose a price
-              </div>
+              <div class="invalid-feedback">Please choose a valid price</div>
             </div>
 
             <div>
@@ -79,9 +72,7 @@
                 placeholder="Add description to your listing..."
                 required
               ></textarea>
-              <div class="invalid-feedback">
-                Please choose a description
-              </div>
+              <div class="invalid-feedback">Please choose a description</div>
             </div>
 
             <div class="w-100">
