@@ -34,7 +34,9 @@
                 class="form-control"
                 accept="image/png, image/jpeg"
                 type="file"
+                name="files"
                 id="upload-image"
+                enctype="multipart/form-data"
                 required
               />
               <div class="valid-feedback">Looks good!</div>
@@ -46,6 +48,7 @@
                 type="text"
                 class="form-control"
                 id="title"
+                name="title"
                 placeholder="Title"
                 required
               />
@@ -58,6 +61,7 @@
                 type="text"
                 class="form-control"
                 id="price"
+                name="price"
                 pattern="^[1-9]\d*$"
                 placeholder="Price"
                 required
@@ -71,6 +75,7 @@
                 type="text"
                 class="form-control"
                 id="description"
+                name="description"
                 placeholder="Add description to your listing..."
                 required
               ></textarea>

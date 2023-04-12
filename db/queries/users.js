@@ -27,10 +27,11 @@ const getUserByEmail = (email) => {
 const addUser = (username, email, password) => {
   return db
     .query(
-      "INSERT INTO users (username, email, password, is_admin) VALUES ($1, $2, $3, $4)",
+      "INSERT INTO users (username, email, password, is_admin) VALUES ($1, $2, $3, $4) RETURNING *",
       [username, email, password, false]
     )
     .then((data) => {
+      console.log(data)
       return data.rows[0];
     })
     .catch((err) => {

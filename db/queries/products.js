@@ -45,24 +45,26 @@ const addProduct = (product) => {
     .query(
       `
   INSERT INTO products (user_id, title, price, img, description, category, is_sold)
-  VALUES ($1, $2, $3, $4, $5, $6, $7);
+  VALUES ($1, $2, $3, $4, $5, $6, $7)
+  RETURNING *
   `,
       [
-        user_id,
-        title,
-        price,
-        img,
-        description,
-        category,
-        is_sold,
+        product.user_id,
+        product.title,
+        product.price,
+        product.img,
+        product.description,
+        product.category,
+        product.is_sold,
       ]
     )
     .then((results) => {
+      console.log("Sucess")
+
       return results.rows;
     })
     .catch((err) => {
-      console.log(err.message);
-      return null;
+      return err;
     });
 };
 
