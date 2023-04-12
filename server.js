@@ -49,6 +49,7 @@ app.use("/api/products", productsApiRoutes);
 app.use("/api/users", usersApiRoutes);
 app.use("/api/auth", authApiRoutes);
 app.use("/product", productRoutes);
+app.use("/", productRoutes);
 app.use("/auth", onboardingRoutes);
 
 // Note: mount other resources here, using the same pattern above
@@ -57,9 +58,9 @@ app.use("/auth", onboardingRoutes);
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-app.get("/", (req, res) => {
-  res.redirect("/product");
-});
+// app.get("/", (req, res) => {
+//   res.redirect("/product");
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
