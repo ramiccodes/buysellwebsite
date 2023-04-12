@@ -33,6 +33,7 @@ const productsApiRoutes = require('./routes/products-api');
 const usersApiRoutes = require('./routes/users-api');
 const usersRoutes = require('./routes/users');
 const productRoutes = require('./routes/product');
+const onboardingRoutes = require('./routes/onboarding');
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
@@ -42,6 +43,7 @@ app.use('/api/users', usersApiRoutes);
 app.use('/users', usersRoutes);
 app.use('/', appRoutes);
 app.use('/', productRoutes);
+app.use('/', onboardingRoutes);
 // Note: mount other resources here, using the same pattern above
 
 // Home page
