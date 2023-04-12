@@ -11,7 +11,7 @@ const { getUserById, getUsers } = require("../db/queries/users");
 
 // @desc Gets all users from database
 // @route /api/users
-// @method POST
+// @method GET
 
 router.get("/", (req, res) => {
   getUsers()
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 
 // @desc Gets one user from database
 // @route /api/users/:id
-// @method POST
+// @method GET
 
 router.get("/:id", (req, res) => {
   const userId = req.params.id;
