@@ -17,11 +17,11 @@ $(document).ready(function () {
         method: "POST",
         url: "/api/products",
         data: queryString,
-        success: () => {
-          console.log("Success");
+        success: (res) => {
+          console.log(res);
         },
-        error: () => {
-          console.log("Error");
+        error: (err) => {
+          console.log(err);
         },
       });
     }
@@ -41,7 +41,6 @@ $(document).ready(function () {
       processData: false,
       contentType: false,
       success: (res) => {
-
         // Update url for form submission
         imgUrl = res.data.filename;
       },

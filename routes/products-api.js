@@ -17,8 +17,15 @@ const router = express.Router();
 // @method GET
 
 router.get("/", (req, res) => {
+  let page = 0
+
+  // If query string exists then set page to selected page
+  if (req.query.page) {
+    page = Number(req.query.page)
+  }
+
   productQueries
-    .getProducts()
+    .getProductsByPage(page)
     .then((products) => {
       res.json({ products });
     })
@@ -59,37 +66,43 @@ router.post("/", (req, res) => {
   }
 
   // If id was found, then search for user
-  getUserById(userId).then((user) => {
-    // If id could not be associated with another user
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        message: "Could not find user with id",
-      });
-    }
+  getUserById(userId)
+    .then((user) => {
+      // If id could not be associated with another user
+      if (!user) {
+        res.status(404).json({
+          success: false,
+          message: "Could not find user with id",
+        });
+      }
 
-    // Check if user is not admin
-    if (!user.isAdmin) {
-      res.status(404).json({
-        success: false,
-        message: "Not admin",
-      });
-    }
+      // Check if user is not admin
+      if (!user.isAdmin) {
+        res.status(404).json({
+          success: false,
+          message: "Not admin",
+        });
+      }
 
-    const productDetails = {
-      title,
-      price,
-      description,
-      img: img,
-      user_id: user.id,
-      category: "",
-      is_sold: false,
-    };
-
-    productQueries.addProduct(productDetails).then((product) => {
-      console.log(product);
+      return {
+        title,
+        price,
+        description,
+        img: img,
+        user_id: user.id,
+        category: "",
+        is_sold: false,
+      };
+    })
+    .then((data) => {
+      return productQueries.addProduct(data);
+    })
+    .then((result) => {
+      return "pog"
+    })
+    .catch((err) => {
+      return "..."
     });
-  });
 });
 
 // @desc Deletes a product on the database

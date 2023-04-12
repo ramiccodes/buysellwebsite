@@ -35,7 +35,6 @@ const getProductWithUserById = (id) => {
       [id]
     )
     .then((data) => {
-      console.log(data)
       return data.rows[0];
     });
 };
@@ -60,11 +59,12 @@ const addProduct = (product) => {
       ]
     )
     .then((results) => {
+      console.log("Sucess")
+
       return results.rows;
     })
     .catch((err) => {
-      console.log(err.message);
-      return null;
+      return err;
     });
 };
 
