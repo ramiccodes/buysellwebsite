@@ -22,18 +22,35 @@ router.post("/login", (req, res) => {
     });
   }
 
-  getUserByEmail(email).then((user) => {
-    const salt = bcrypt.compareSync(password, user.password);
+  getUserByEmail(email)
+    .then((user) => {
+      // If no user is returned, then false
+      if (!user) {
+        res.status(404).json({
+          success: false,
+        });
+      }
 
-    if (!salt) {
-      return res.status(404).json({
+      // Compare encrypted password to input password
+      const salt = bcrypt.compareSync(password, user.password);
+
+      // If false, then return
+      if (!salt) {
+        return res.status(404).json({
+          success: false,
+        });
+      }
+
+      req.session.user_id = user.id;
+      res.redirect("/product");
+    })
+
+    // Catch error on
+    .catch((err) => {
+      res.status(404).json({
         success: false,
       });
-    }
-
-    req.session.user_id = user.id;
-    res.redirect("/product");
-  });
+    });
 });
 
 // @desc Adds single user into the database, returns cookie session
