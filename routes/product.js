@@ -10,13 +10,17 @@ const router = express.Router();
 const { getProductWithUserById } = require("../db/queries/products");
 
 // @route /product
-// @desc Shows all listing made by user
+// @desc Renders all products made by user
+// @method GET
+
 router.get("/product", (req, res) => {
   res.render("index");
 });
 
 // @route /product/:id
 // @desc Shows all info about product
+// @method GET
+
 router.get("/product/:id", (req, res) => {
   const productId = req.params.id;
 

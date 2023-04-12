@@ -9,6 +9,10 @@ const express = require('express');
 const router  = express.Router();
 const userQueries = require('../db/queries/users');
 
+// @desc Gets all users from database
+// @route /api/users
+// @method POST
+
 router.get('/', (req, res) => {
   userQueries.getUsers()
     .then(users => {
@@ -20,6 +24,10 @@ router.get('/', (req, res) => {
         .json({ error: err.message });
     });
 });
+
+// @desc Adds product into the database
+// @route /api/users/:id
+// @method POST
 
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
