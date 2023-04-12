@@ -18,9 +18,11 @@
             <div class="square-image">
               <img src="<%= img %>" alt="Product Image" class="img-fluid rounded">
             </div>
-            <button class="favorite-btn">
-              <i class="fas fa-heart fa-2x"></i>
-            </button>
+            <form action="/api/products/<%= id %>/favorite" method="POST">
+              <button class="favorite-btn" type="submit">
+                <i class="fas fa-heart fa-2x"></i>
+              </button>
+            </form>
           </div>
         </div>
         <div class="col-md-6">
