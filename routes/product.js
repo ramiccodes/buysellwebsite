@@ -18,6 +18,14 @@ router.get("/", (req, res) => {
 });
 
 // @route /product/:id
+// @desc Show form for adding new post
+// @method GET
+
+router.get("/create", (req, res) => {
+  res.render("create");
+});
+
+// @route /product/:id
 // @desc Shows all info about product
 // @method GET
 

@@ -4,13 +4,19 @@ const router = express.Router();
 const { addUser, getUserByEmail } = require("../db/queries/users");
 
 // @desc Login user with cookie session
-// @route /api/users/
+// @route /api/auth/
 // @method POST
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email) {
+    res.status(404).json({
+      success: false,
+    });
+  }
+
+  if (!password) {
     res.status(404).json({
       success: false,
     });
@@ -25,12 +31,13 @@ router.post("/login", (req, res) => {
       });
     }
 
+    req.session.user_id = user.id;
     res.redirect("/product");
   });
 });
 
 // @desc Adds single user into the database, returns cookie session
-// @route /api/users/
+// @route /api/auth/
 // @method POST
 
 router.post("/signup", (req, res) => {
@@ -41,11 +48,21 @@ router.post("/signup", (req, res) => {
 
   addUser(username, email, hash)
     .then((user) => {
+      req.session.user_id = user.id;
       res.redirect("/product");
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });
     });
+});
+
+// @desc Logout user by clearing cookie session
+// @route /api/auth/
+// @method POST
+
+router.post("/logout", (req, res) => {
+  req.session = null;
+  res.redirect("/product");
 });
 
 module.exports = router;
