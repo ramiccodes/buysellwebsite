@@ -38,4 +38,9 @@ const addUser = (username, email, password) => {
     });
 };
 
-module.exports = { getUsers, getUserByEmail, addUser, getUserById };
+
+const getUserFavorites = (id) => {
+  return db.query(`SELECT product_id FROM favorites WHERE user_id = $1`, [id])
+}
+
+module.exports = { getUsers, getUserByEmail, addUser, getUserById, getUserFavorites };
