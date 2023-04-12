@@ -9,15 +9,32 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/signup", (req, res) => {
-  res.render("signup");
+  const isLoggedIn = req.session.user_id;
+
+  // If logged in, don't let user go to signup page
+  if (isLoggedIn) {
+    res.redirect("/");
+  }
+
+  const templateVars = { isLoggedIn };
+  res.render("signup", templateVars);
 });
 
 router.get("/login", (req, res) => {
-  res.render("login");
+  const isLoggedIn = req.session.user_id;
+
+  // If logged in, don't let user go to login page
+  if (isLoggedIn) {
+    res.redirect("/");
+  }
+
+  const templateVars = { isLoggedIn };
+  res.render("login", templateVars);
 });
 
-router.get("/login", (req, res) => {
+router.get("/logout", (req, res) => {
   req.session = null;
+  res.redirect("/");
 });
 
 module.exports = router;

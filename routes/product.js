@@ -14,7 +14,8 @@ const { getProductWithUserById } = require("../db/queries/products");
 // @method GET
 
 router.get("/", (req, res) => {
-  res.render("index");
+  const templateVars = { isLoggedIn: req.session.user_id };
+  res.render("index", templateVars);
 });
 
 // @route /product/:id
@@ -22,7 +23,8 @@ router.get("/", (req, res) => {
 // @method GET
 
 router.get("/create", (req, res) => {
-  res.render("create", isLoggedIn);
+  const templateVars = { isLoggedIn: req.session.user_id };
+  res.render("create", templateVars);
 });
 
 // @route /product/:id
@@ -35,8 +37,8 @@ router.get("/:id", (req, res) => {
   // Render out page using product and joined user info
   getProductWithUserById(productId)
     .then((product) => {
-      console.log(product)
-      res.render("product", product);
+      const templateVars = { ...product, isLoggedIn: req.session.user_id };
+      res.render("product", templateVars);
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });

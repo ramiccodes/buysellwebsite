@@ -2,6 +2,7 @@
 // Ready for post
 
 $(document).ready(function () {
+  console.log(Cookies.get("user_id"))
   if ($.cookie("user_id")) {
     $("#nav-menu").append(`
         <li class="nav-item">
