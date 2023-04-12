@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 // @method GET
 
 router.get("/create", (req, res) => {
-  res.render("create");
+  res.render("create", isLoggedIn);
 });
 
 // @route /product/:id
@@ -35,6 +35,7 @@ router.get("/:id", (req, res) => {
   // Render out page using product and joined user info
   getProductWithUserById(productId)
     .then((product) => {
+      console.log(product)
       res.render("product", product);
     })
     .catch((err) => {
