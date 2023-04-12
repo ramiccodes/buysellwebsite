@@ -1,6 +1,6 @@
 // Ready for post
 $(document).ready(function () {
-  $("#create-product").submit(function (event) {
+  $("#form").submit(function (event) {
     event.preventDefault();
     event.stopPropagation();
     this.classList.add("was-validated");
