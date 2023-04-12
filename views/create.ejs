@@ -9,108 +9,117 @@
 
   <body>
     <%- include('partials/_header') %>
-    <section>
-      <main class="d-flex flex-column flex-md-row gap-4 p-2">
-        <!-- Render card as you create the post -->
-        <div></div>
+    <main class="d-flex flex-column flex-md-row gap-4 p-2">
+      <!-- Render card as you create the post -->
+      <section class="w-100">
+        <article class="">
+          <img id="card-img" src="https://picsum.photos/200/300" />
+          <p id="card-title">?</p>
+          <p id="card-category">?</p>
+          <p id="card-price">?</p>
+          <p id="card-description">?</p>
+        </article>
+      </section>
 
-        <!-- Form -->
-        <div class="w-100">
-          <header class="my-2">
-            <h1 class="h3">Create listing</h1>
-            <hr class="mb-0" />
-          </header>
+      <!-- Form -->
+      <section class="w-100">
+        <header class="my-2">
+          <h1 class="h3">Create listing</h1>
+          <hr class="mb-0" />
+        </header>
 
-          <form
-            id="form"
-            method="POST"
-            action="/api/products"
-            class="d-flex flex-column gap-2 needs-validated"
-            novalidate
+        <form
+          id="form"
+          method="POST"
+          action="/api/products"
+          class="d-flex flex-column gap-2 needs-validated"
+          novalidate
+        >
+          <div>
+            <label for="upload-image" class="form-label d-none"
+              >Upload Image</label
+            >
+            <input
+              class="form-control"
+              accept="image/png, image/jpeg"
+              type="file"
+              name="files"
+              id="upload-image"
+              enctype="multipart/form-data"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please upload an image</div>
+          </div>
+
+          <div class="form-floating d-none">
+            <input
+              type="text"
+              class="form-control"
+              id="input-img"
+              name="input-img"
+              placeholder="image"
+              required
+            />
+            <label for="title">Image</label>
+            <div class="invalid-feedback">Please choose a valid price</div>
+          </div>
+
+          <select
+            name="category"
+            id="input-category"
+            class="form-select"
+            aria-label="Select Category"
           >
-            <div>
-              <label for="upload-image" class="form-label d-none"
-                >Upload Image</label
-              >
-              <input
-                class="form-control"
-                accept="image/png, image/jpeg"
-                type="file"
-                name="files"
-                id="upload-image"
-                enctype="multipart/form-data"
-                required
-              />
-              <div class="valid-feedback">Looks good!</div>
-              <div class="invalid-feedback">Please upload an image</div>
-            </div>
+            <option selected value="furnitures">Furniture</option>
+            <option value="electronics">Electronics</option>
+            <option value="toys">Toys</option>
+          </select>
 
-            <div class="form-floating d-none">
-              <input
-                type="text"
-                class="form-control"
-                id="img"
-                name="img"
-                placeholder="image"
-                required
-              />
-              <label for="title">Image</label>
-              <div class="invalid-feedback">Please choose a valid price</div>
-            </div>
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="input-title"
+              name="title"
+              placeholder="Title"
+              required
+            />
+            <label for="title">Title</label>
+            <div class="invalid-feedback">Please choose a title</div>
+          </div>
 
-            <select name="category" id="category" class="form-select" aria-label="Select Category">
-              <option selected value="furnitures">Furniture</option>
-              <option value="electronics">Electronics</option>
-              <option value="toys">Toys</option>
-            </select>
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="input-price"
+              name="price"
+              pattern="^[1-9]\d*$"
+              placeholder="Price"
+              required
+            />
+            <label for="title">Price</label>
+            <div class="invalid-feedback">Please choose a valid price</div>
+          </div>
 
-            <div class="form-floating">
-              <input
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                placeholder="Title"
-                required
-              />
-              <label for="title">Title</label>
-              <div class="invalid-feedback">Please choose a title</div>
-            </div>
+          <textarea
+            type="text"
+            class="form-control"
+            id="input-description"
+            name="description"
+            placeholder="Add description to your listing..."
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please choose a description</div>
 
-            <div class="form-floating">
-              <input
-                type="text"
-                class="form-control"
-                id="price"
-                name="price"
-                pattern="^[1-9]\d*$"
-                placeholder="Price"
-                required
-              />
-              <label for="title">Price</label>
-              <div class="invalid-feedback">Please choose a valid price</div>
-            </div>
-
-            <div>
-              <textarea
-                type="text"
-                class="form-control"
-                id="description"
-                name="description"
-                placeholder="Add description to your listing..."
-                required
-              ></textarea>
-              <div class="invalid-feedback">Please choose a description</div>
-            </div>
-
-            <div class="w-100">
-              <button type="submit" class="btn btn-primary w-100">
-                Create post
-              </button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </section>
+          <div class="w-100">
+            <button type="submit" class="btn btn-primary w-100">
+              Create post
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
   </body>
 </html>

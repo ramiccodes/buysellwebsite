@@ -8,17 +8,16 @@
   <body>
     <%- include('partials/_header') %>
     <div class="d-flex flex-column gap-2 p-2">
-      <!-- Searchbar  -->
+
+      <!-- Searchbar wrapper -->
       <div class="w-100 d-flex align-items-center gap-3 pb-2">
 
+        <!-- Searchbar form -->
         <form class="form-floating w-100">
-
           <div class="input-group">
             <span class="input-group-text">
-              <i
-                class="fa-solid fa-search"
-              ></i
-            ></span>
+              <i class="fa-solid fa-search"></i>
+            </span>
             <input
               type="text"
               class="form-control"
@@ -27,6 +26,7 @@
           </div>
         </form>
 
+        <!-- Filter Dropdown button -->
         <div class="btn-group">
           <button
             type="button"
@@ -37,7 +37,7 @@
             aria-label="Toggle filter form"
             class="btn btn-primary dropdown-toggle"
           >
-            <i role="button" class="fa-solid fa-filter"></i>
+            <i class="fa-solid fa-filter"></i>
           </button>
         </div>
       </div>
@@ -47,34 +47,40 @@
         class="collapse rounded border-dark-subtle border border-1"
         id="filter-form"
       >
-        <ul class="p-3 m-0">
-          <select name="category" id="category" class="mb-2 form-select" aria-label="Select Category">
-            <option selected value="furnitures">Furniture</option>
-            <option value="electronics">Electronics</option>
-            <option value="toys">Toys</option>
-          </select>
-          <div class="d-flex gap-2">
-            <li class="input-group col">
-              <span class="input-group-text" >
-                <i class="fa-solid fa-dollar"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control input-dark"
-                placeholder="Min price"
-              />
-            </li>
-            <li class="input-group col">
-              <span class="input-group-text" >
-                <i class="fa-solid fa-dollar"></i>
-              </span>
-              <input
-                id="price-max"
-                type="text"
-                class="form-control"
-                placeholder="Max price"
-              />
-            </li>
+        <div class="p-3 m-0">
+
+          <!-- Filters by category -->
+            <select name="category" id="category" class="mb-2 form-select" aria-label="Select Category">
+              <option selected value="furnitures">Furniture</option>
+              <option value="electronics">Electronics</option>
+              <option value="toys">Toys</option>
+            </select>
+
+            <!-- Filters by Price (min, max) -->
+            <fieldset class="d-flex gap-2">
+              <div class="input-group col">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-dollar"></i>
+                </span>
+                <input
+                  id="price-min"
+                  type="text"
+                  class="form-control input-dark"
+                  placeholder="Min price"
+                />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text" >
+                  <i class="fa-solid fa-dollar"></i>
+                </span>
+                <input
+                  id="price-max"
+                  type="text"
+                  class="form-control"
+                  placeholder="Max price"
+                />
+              </div>
+            </fieldset>
           </div>
         </form>
       </div>
