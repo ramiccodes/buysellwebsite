@@ -1,0 +1,13 @@
+// Divider for menu bars,
+.divider-menu {
+  width: 100%;
+  height: 1px;
+  background-color: white;
+  opacity: 25%;
+}
+
+@media (min-width: 990px) {
+  .divider-menu {
+    display: none;
+  }
+}
