@@ -13,7 +13,7 @@ const { getProductWithUserById } = require("../db/queries/products");
 // @desc Renders all products made by user
 // @method GET
 
-router.get("/product", (req, res) => {
+router.get("/", (req, res) => {
   res.render("index");
 });
 
@@ -21,7 +21,7 @@ router.get("/product", (req, res) => {
 // @desc Shows all info about product
 // @method GET
 
-router.get("/product/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   const productId = req.params.id;
 
   // Render out page using product and joined user info

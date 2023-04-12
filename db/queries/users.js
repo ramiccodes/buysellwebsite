@@ -14,4 +14,28 @@ const getUserById = (id) => {
   });
 };
 
-module.exports = { getUsers, getUserById };
+// @desc Queries single by user email
+const getUserByEmail = (email) => {
+  return db
+    .query(`SELECT * FROM users WHERE email = $1`, [email])
+    .then((data) => {
+      return data.rows[0];
+    });
+};
+
+// @desc Queries to add one user to database
+const addUser = (username, email, password) => {
+  return db
+    .query(
+      "INSERT INTO users (username, email, password, is_admin) VALUES ($1, $2, $3, $4)",
+      [username, email, password, false]
+    )
+    .then((data) => {
+      return data.rows[0];
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+module.exports = { getUsers, getUserByEmail, addUser, getUserById };
