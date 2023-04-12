@@ -66,10 +66,24 @@ const addProduct = (product) => {
     });
 };
 
+// @desc Queries to delete one product on the database by ID
+const deleteProduct = (id) => {
+  return db
+    .query("DELETE FROM products WHERE products.id = $1", [id])
+    .then((data) => {
+      return data.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+      return null;
+    });
+}
+
 module.exports = {
   getProducts,
   getProductsByPage,
   getProductWithUserById,
   getProductById,
   addProduct,
+  deleteProduct
 };
