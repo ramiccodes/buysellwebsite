@@ -8,6 +8,10 @@
 const express = require("express");
 const router = express.Router();
 
+// @route /auth/signup
+// @desc Shows form for registering users
+// @method GET
+
 router.get("/signup", (req, res) => {
   const isLoggedIn = req.session.user_id;
 
@@ -20,6 +24,10 @@ router.get("/signup", (req, res) => {
   res.render("signup", templateVars);
 });
 
+// @route /auth/login
+// @desc Shows form for logging in users
+// @method GET
+
 router.get("/login", (req, res) => {
   const isLoggedIn = req.session.user_id;
 
@@ -31,6 +39,10 @@ router.get("/login", (req, res) => {
   const templateVars = { isLoggedIn };
   res.render("login", templateVars);
 });
+
+// @route /auth/logout
+// @desc Shows form for logging out users
+// @method GET
 
 router.get("/logout", (req, res) => {
   req.session = null;

@@ -6,8 +6,11 @@
  */
 
 const express = require("express");
-const router = express.Router();
+
 const productQueries = require("../db/queries/products");
+const { getUserById } = require("../db/queries/users");
+
+const router = express.Router();
 
 // @desc Returns all products from database
 // @route /api/products
@@ -45,11 +48,47 @@ router.get("/:id", (req, res) => {
 // @method POST
 
 router.post("/", (req, res) => {
-  const { user_id, title, price, img, description, category, is_sold } =
-    req.body;
-  const productDetails = req.body;
-  productQueries.addProduct(productDetails).then(() => {
-    res.status(201).send("Product listed!");
+  const { title, price, description, img } = req.body;
+  const userId = req.session.user_id;
+
+  if (!userId) {
+    res.status(404).json({
+      success: false,
+      message: "Not valid user",
+    });
+  }
+
+  // If id was found, then search for user
+  getUserById(userId).then((user) => {
+    // If id could not be associated with another user
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "Could not find user with id",
+      });
+    }
+
+    // Check if user is not admin
+    if (!user.isAdmin) {
+      res.status(404).json({
+        success: false,
+        message: "Not admin",
+      });
+    }
+
+    const productDetails = {
+      title,
+      price,
+      description,
+      img: img,
+      user_id: user.id,
+      category: "",
+      is_sold: false,
+    };
+
+    productQueries.addProduct(productDetails).then((product) => {
+      console.log(product);
+    });
   });
 });
 
@@ -59,56 +98,52 @@ router.post("/", (req, res) => {
 
 router.post("/:id/delete", (req, res) => {
   const productId = req.params.id;
-  productQueries.deleteProduct(productId)
-  .then(() => {
+  productQueries.deleteProduct(productId).then(() => {
     res.status(200).send("Product deleted!");
-  })
-})
+  });
+});
 
 // Need fixing
-router.post("/:id/edit"), (req, res) => {
-  // const productDetails = req.body;
-  productQueries.editProduct(req.params.id)
-    .then((product) => {
-    res.redirect("/product")
-  });
-}
+router.post("/:id/edit"),
+  (req, res) => {
+    // const productDetails = req.body;
+    productQueries.editProduct(req.params.id).then((product) => {
+      res.redirect("/product");
+    });
+  };
 
 // @desc Marks a product as sold on the database
 // @route /api/products/:id/sold
 // @method POST
 router.post("/:id/sold", (req, res) => {
-  productQueries.markAsSold(req.params.id)
-    .then(product => {
-      console.log("Marked as Sold");
-      res.redirect("/product")
-    })
-})
+  productQueries.markAsSold(req.params.id).then((product) => {
+    console.log("Marked as Sold");
+    res.redirect("/product");
+  });
+});
 
 // @desc Marks a product as a user's favorite on the database
 // @route /api/products/:id/favorite
 // @method POST
 router.post("/:id/favorite", (req, res) => {
-  const userId = req.session['userId'];
+  const userId = req.session["userId"];
   const itemId = req.params.id;
-  productQueries.addFavorite(userId, itemId)
-  .then(product => {
+  productQueries.addFavorite(userId, itemId).then((product) => {
     console.log("Marked as Favorite");
-    res.redirect("/product")
-  })
-})
+    res.redirect("/product");
+  });
+});
 
 // @desc Removes a product as a user's favorite on the database
 // @route /api/products/:id/favorite/delete
 // @method POST
 router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session['userId'];
+  const userId = req.session["userId"];
   const itemId = req.params.id;
-  productQueries.removeFavorite(userId, itemId)
-  .then(product => {
+  productQueries.removeFavorite(userId, itemId).then((product) => {
     console.log("Removed as Favorite");
-    res.redirect("/product")
-  })
-})
+    res.redirect("/product");
+  });
+});
 
 module.exports = router;
