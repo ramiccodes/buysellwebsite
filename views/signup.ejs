@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Create Post</title>
+    <title>Signup</title>
+    <script defer src="/scripts/signup.js"></script>
+
     <%- include('partials/_meta') %>
   </head>
 
@@ -16,6 +18,8 @@
       <!-- Signup Form -->
       <form
         id="form"
+        action="/api/auth/signup"
+        method="POST"
         class="d-flex flex-column gap-2 needs-validated"
         novalidate
       >
@@ -27,6 +31,7 @@
             type="text"
             class="form-control"
             id="username"
+            name="username"
             placeholder="Username"
             required
           />
@@ -38,6 +43,7 @@
             type="email"
             class="form-control"
             id="email"
+            name="email"
             placeholder="Email"
             required
           />
@@ -52,6 +58,7 @@
             type="password"
             class="form-control"
             id="password"
+            name="password"
             placeholder="Password"
             required
           />

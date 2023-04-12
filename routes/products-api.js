@@ -5,45 +5,52 @@
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
+const express = require("express");
+const router = express.Router();
+const productQueries = require("../db/queries/products");
 
-// ! Will replace with posts API routing
+// @desc Returns all products from database
+// @route /api/product
+// @method GET
 
-const express = require('express');
-const router  = express.Router();
-const productQueries = require('../db/queries/products');
-
-router.get('/', (req, res) => {
-  productQueries.getProducts()
-    .then(products => {
+router.get("/", (req, res) => {
+  productQueries
+    .getProducts()
+    .then((products) => {
       res.json({ products });
     })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
     });
 });
 
-router.get('/:id', (req, res) => {
+// @desc Returns one product from database
+// @route /api/product/:id
+// @method GET
+
+router.get("/:id", (req, res) => {
   const productId = req.params.id;
-  productQueries.getProductById(productId)
-    .then(product => {
+  productQueries
+    .getProductWithUserById(productId)
+    .then((product) => {
       res.json({ product });
     })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
     });
 });
 
-router.post('/', (req, res) => {
-  const { user_id, title, price, img, description, category, is_sold } = req.body;
+// @desc Adds product into the database
+// @route /api/product
+// @method POST
+
+router.post("/", (req, res) => {
+  const { user_id, title, price, img, description, category, is_sold } =
+    req.body;
   const productDetails = req.body;
-  productQueries.addProduct(productDetails)
-  .then(() => {
-    res.status(201).send('Product listed!');
-  })
-})
+  productQueries.addProduct(productDetails).then(() => {
+    res.status(201).send("Product listed!");
+  });
+});
 
 module.exports = router;

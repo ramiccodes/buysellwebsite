@@ -10,12 +10,14 @@
     <main class="d-flex flex-column gap-2 p-2">
       <header class="my-2">
         <h1 class="h3">Login</h1>
-        <hr class="mb-0"/>
+        <hr class="mb-0" />
       </header>
 
       <!-- Login Form -->
       <form
         id="form"
+        method="POST"
+        action="/api/auth/login"
         class="d-flex flex-column gap-2 needs-validated"
         novalidate
       >
@@ -26,6 +28,7 @@
             id="email"
             class="form-control"
             placeholder="Email"
+            name="email"
             required
           />
           <div class="invalid-feedback">Please enter your email</div>
@@ -40,15 +43,14 @@
             class="form-control"
             id="password"
             placeholder="Password"
+            name="password"
             required
           />
           <div class="invalid-feedback">Please enter your password</div>
         </div>
 
         <div class="w-100">
-          <button type="submit" class="btn btn-primary w-100">
-            Login
-          </button>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
         </div>
       </form>
     </main>
