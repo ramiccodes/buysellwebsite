@@ -24,4 +24,26 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+  const productId = req.params.id;
+  productQueries.getProductById(productId)
+    .then(product => {
+      res.json({ product });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+router.post('/', (req, res) => {
+  const { user_id, title, price, img, description, category, is_sold } = req.body;
+  const productDetails = req.body;
+  productQueries.addProduct(productDetails)
+  .then(() => {
+    res.status(201).send('Product listed!');
+  })
+})
+
 module.exports = router;
