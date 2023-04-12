@@ -1,5 +1,6 @@
 const db = require('../connection');
 
+// @desc Gets arrays of product objects
 const getProducts = () => {
   return db.query('SELECT * FROM products;')
     .then(data => {
@@ -7,7 +8,16 @@ const getProducts = () => {
     });
 };
 
+// @desc Gets one product object by Id
 const getProductById = (id) => {
+  return db.query('SELECT * FROM products WHERE products.id = $1', [id])
+    .then(data => {
+      return data.rows[0];
+    });
+}
+
+// @desc Gets one product, with associated user by product id
+const getProductWithUserById = (id) => {
   return db.query('SELECT * FROM products JOIN users ON (users.id=products.user_id) WHERE products.id = $1', [id])
     .then(data => {
       return data.rows[0];
@@ -28,4 +38,4 @@ const addProduct = (product) => {
     });
 }
 
-module.exports = { getProducts, getProductById, addProduct };
+module.exports = { getProducts, getProductWithUserById, getProductById, addProduct };

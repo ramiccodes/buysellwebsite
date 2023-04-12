@@ -7,14 +7,22 @@
 
 const express = require("express");
 const router = express.Router();
-const productQueries = require('../db/queries/products');
+const { getProductWithUserById } = require("../db/queries/products");
 
+// @route /product
+// @desc Shows all listing made by user
+router.get("/product", (req, res) => {
+  res.render("index");
+});
+
+// @route /product/:id
+// @desc Shows all info about product
 router.get("/product/:id", (req, res) => {
   const productId = req.params.id;
-  productQueries
-    .getProductById(productId)
+
+  // Render out page using product and joined user info
+  getProductWithUserById(productId)
     .then((product) => {
-      console.log(product)
       res.render("product", product);
     })
     .catch((err) => {
