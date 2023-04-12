@@ -10,7 +10,7 @@ const router = express.Router();
 const productQueries = require("../db/queries/products");
 
 // @desc Returns all products from database
-// @route /api/product
+// @route /api/products
 // @method GET
 
 router.get("/", (req, res) => {
@@ -25,13 +25,13 @@ router.get("/", (req, res) => {
 });
 
 // @desc Returns one product from database
-// @route /api/product/:id
+// @route /api/products/:id
 // @method GET
 
 router.get("/:id", (req, res) => {
   const productId = req.params.id;
   productQueries
-    .getProductWithUserById(productId)
+    .getProductById(productId)
     .then((product) => {
       res.json({ product });
     })
@@ -41,7 +41,7 @@ router.get("/:id", (req, res) => {
 });
 
 // @desc Adds product into the database
-// @route /api/product
+// @route /api/products
 // @method POST
 
 router.post("/", (req, res) => {
@@ -52,5 +52,63 @@ router.post("/", (req, res) => {
     res.status(201).send("Product listed!");
   });
 });
+
+// @desc Deletes a product on the database
+// @route /api/products/:id/delete
+// @method POST
+
+router.post("/:id/delete", (req, res) => {
+  const productId = req.params.id;
+  productQueries.deleteProduct(productId)
+  .then(() => {
+    res.status(200).send("Product deleted!");
+  })
+})
+
+// Need fixing
+router.post("/:id/edit"), (req, res) => {
+  // const productDetails = req.body;
+  productQueries.editProduct(req.params.id)
+    .then((product) => {
+    res.redirect("/product")
+  });
+}
+
+// @desc Marks a product as sold on the database
+// @route /api/products/:id/sold
+// @method POST
+router.post("/:id/sold", (req, res) => {
+  productQueries.markAsSold(req.params.id)
+    .then(product => {
+      console.log("Marked as Sold");
+      res.redirect("/product")
+    })
+})
+
+// @desc Marks a product as a user's favorite on the database
+// @route /api/products/:id/favorite
+// @method POST
+router.post("/:id/favorite", (req, res) => {
+  const userId = req.session['userId'];
+  const itemId = req.params.id;
+  productQueries.addFavorite(userId, itemId)
+  .then(product => {
+    console.log("Marked as Favorite");
+    res.redirect("/product")
+  })
+})
+
+// @desc Removes a product as a user's favorite on the database
+// @route /api/products/:id/favorite/delete
+// @method POST
+router.post("/:id/favorite/delete", (req, res) => {
+  const userId = req.session['userId'];
+  const itemId = req.params.id;
+  productQueries.removeFavorite(userId, itemId)
+  .then(product => {
+    console.log("Removed as Favorite");
+    res.redirect("/product")
+  })
+})
 
 module.exports = router;

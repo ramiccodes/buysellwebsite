@@ -7,11 +7,11 @@
 
 const express = require("express");
 const router = express.Router();
-const { getUserById, getUsers } = require("../db/queries/users");
+const { getUserById, getUsers, getUserFavorites } = require("../db/queries/users");
 
 // @desc Gets all users from database
 // @route /api/users
-// @method POST
+// @method GET
 
 router.get("/", (req, res) => {
   getUsers()
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 
 // @desc Gets one user from database
 // @route /api/users/:id
-// @method POST
+// @method GET
 
 router.get("/:id", (req, res) => {
   const userId = req.params.id;
@@ -38,5 +38,18 @@ router.get("/:id", (req, res) => {
       res.status(500).json({ error: err.message });
     });
 });
+
+// @desc Gets all of a user's favorite listings from the database
+// @route /api/users/:id/favorite
+// @method GET
+
+router.get("/:id/favorite", (req, res) => {
+  const userId = req.session['userId'];
+
+  getUserFavorites(userId)
+    .then((favorites) => {
+      res.redirect("/favorites") //PLACEHOLDER ROUTE UNTIL FAVORITES VIEW GETS MADE
+    })
+})
 
 module.exports = router;
