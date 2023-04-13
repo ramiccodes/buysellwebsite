@@ -10,46 +10,45 @@ const { addUser, getUserByEmail } = require("../db/queries/users");
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
+  // If no email was provided
   if (!email) {
-    res.status(404).json({
-      success: false,
+    res.render("login", {
+      isLoggedIn: false,
+      error: "Please enter your email",
     });
   }
 
+  // If no password was provided
   if (!password) {
-    res.status(404).json({
-      success: false,
+    res.render("login", {
+      isLoggedIn: false,
+      error: "Please enter your password",
     });
   }
 
   getUserByEmail(email)
     .then((user) => {
-      // If no user is returned, then false
+      // If no user is returned
       if (!user) {
-        res.status(404).json({
-          success: false,
-        });
+        res.render("login", { isLoggedIn: false, error: "User not found." });
       }
 
       // Compare encrypted password to input password
       const salt = bcrypt.compareSync(password, user.password);
 
-      // If false, then return
+      // If compared password doesn't match, then return relevant message
       if (!salt) {
-        return res.status(404).json({
-          success: false,
-        });
+        res.render("login", { isLoggedIn: false, error: "Incorrect password" });
       }
 
+      // If all checks passes, then login user with provided user
       req.session.user_id = user.id;
       res.redirect("/product");
     })
 
-    // Catch error on
-    .catch((err) => {
-      res.status(404).json({
-        success: false,
-      });
+    // Catch any remaning errors
+    .catch(() => {
+      res.render("login", { isLoggedIn: false, error: "Error finding user" });
     });
 });
 
@@ -60,16 +59,64 @@ router.post("/login", (req, res) => {
 router.post("/signup", (req, res) => {
   const { username, email, password } = req.body;
 
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
+  // If no username was provided
+  if (!username) {
+    res.render("signup", {
+      isLoggedIn: false,
+      error: "Please enter your username",
+    });
+  }
 
-  addUser(username, email, hash)
+  // If no email was provided
+  if (!email) {
+    res.render("signup", {
+      isLoggedIn: false,
+      error: "Please enter your email",
+    });
+  }
+
+  // If no password was provided
+  if (!password) {
+    res.render("signup", {
+      isLoggedIn: false,
+      error: "Please enter your password",
+    });
+  }
+
+  getUserByEmail(email)
     .then((user) => {
+      // If no user is returned
+      if (user) {
+        res.render("signup", { isLoggedIn: false, error: "User already exists" });
+      }
+
+      // Encrypt password before pushing out
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
+
+      // Attempt to add user to database
+      addUser(username, email, hash)
+        .then((user) => {
+          req.session.user_id = user.id;
+          res.redirect("/product");
+        })
+
+        // Catch any remaining errors
+        .catch(() => {
+          res.render("signup", {
+            isLoggedIn: false,
+            error: "Error adding user",
+          });
+        });
+
+      // If all checks passes, then login user with provided user
       req.session.user_id = user.id;
       res.redirect("/product");
     })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
+
+    // Catch any remaning errors
+    .catch(() => {
+      res.render("login", { isLoggedIn: false, error: "Error finding user" });
     });
 });
 
@@ -79,7 +126,7 @@ router.post("/signup", (req, res) => {
 
 router.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/product");
+  res.redirect("/login");
 });
 
 module.exports = router;

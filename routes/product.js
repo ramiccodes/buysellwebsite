@@ -23,8 +23,14 @@ router.get("/", (req, res) => {
 // @method GET
 
 router.get("/create", (req, res) => {
-  const templateVars = { isLoggedIn: req.session.user_id };
-  res.render("create", templateVars);
+  const userId = req.session.user_id;
+
+  // Don't authorize not logged in users
+  if (!userId) {
+    res.redirect("/auth/login");
+  }
+
+  res.render("create", { isLoggedIn: userId, error: null });
 });
 
 // @route /product/:id

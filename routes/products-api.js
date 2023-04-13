@@ -6,22 +6,21 @@
  */
 
 const express = require("express");
-
 const productQueries = require("../db/queries/products");
 const { getUserById } = require("../db/queries/users");
-
 const router = express.Router();
 
 // @desc Returns all products from database
-// @route /api/products
+// @route /api/product
+// @query ?page=1
 // @method GET
 
 router.get("/", (req, res) => {
-  let page = 0
+  let page = 0;
 
   // If query string exists then set page to selected page
   if (req.query.page) {
-    page = Number(req.query.page)
+    page = Number(req.query.page);
   }
 
   productQueries
@@ -55,14 +54,31 @@ router.get("/:id", (req, res) => {
 // @method POST
 
 router.post("/", (req, res) => {
-  const { title, price, description, img } = req.body;
+  const { title, price, category, description, img } = req.body;
   const userId = req.session.user_id;
 
   if (!userId) {
-    res.status(404).json({
-      success: false,
-      message: "Not valid user",
+    res.redirect("/auth/login", {
+      isLoggedIn: userId,
+      error: "Please login first before accessing this page.",
     });
+  }
+
+  // Error handling for creating post
+  if (!title) {
+    res.render("/product/create", { error: "Please provide title" });
+  }
+
+  if (!description) {
+    res.render("/product/create", { error: "Please provide description" });
+  }
+
+  if (!img) {
+    res.render("/product/create", { error: "Please provide image" });
+  }
+
+  if (!price) {
+    res.render("/product/create", { error: "Please provide price" });
   }
 
   // If id was found, then search for user
@@ -77,7 +93,7 @@ router.post("/", (req, res) => {
       }
 
       // Check if user is not admin
-      if (!user.isAdmin) {
+      if (!user.is_admin) {
         res.status(404).json({
           success: false,
           message: "Not admin",
@@ -87,10 +103,10 @@ router.post("/", (req, res) => {
       return {
         title,
         price,
+        category,
         description,
         img: img,
         user_id: user.id,
-        category: "",
         is_sold: false,
       };
     })
@@ -98,10 +114,10 @@ router.post("/", (req, res) => {
       return productQueries.addProduct(data);
     })
     .then((result) => {
-      return "pog"
+      res.redirect("/");
     })
     .catch((err) => {
-      return "..."
+      res.redirect("/product/create");
     });
 });
 
@@ -116,14 +132,15 @@ router.delete("/:id/delete", (req, res) => {
   });
 });
 
-// Need fixing
-router.post("/:id/edit"),
+
+router.post("/:id/edit",
   (req, res) => {
-    // const productDetails = req.body;
-    productQueries.editProduct(req.params.id).then((product) => {
+    const { title, price, img, description, category, is_sold } = req.body;
+    const productDetails = req.body;
+    productQueries.editProduct(req.params.id, productDetails).then((product) => {
       res.redirect("/product");
     });
-  };
+  });
 
 // @desc Marks a product as sold on the database
 // @route /api/products/:id/sold
@@ -153,7 +170,7 @@ router.put("/:id/sold", (req, res) => {
 // @route /api/products/:id/favorite
 // @method POST
 router.post("/:id/favorite", (req, res) => {
-  const userId = req.session["userId"];
+  const userId = req.session["user_id"];
   const itemId = req.params.id;
   productQueries.addFavorite(userId, itemId).then((product) => {
     console.log("Marked as Favorite");
@@ -164,8 +181,9 @@ router.post("/:id/favorite", (req, res) => {
 // @desc Removes a product as a user's favorite on the database
 // @route /api/products/:id/favorite/delete
 // @method POST
+// This one needs to be fixed
 router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session["userId"];
+  const userId = req.session["user_id"];
   const itemId = req.params.id;
   productQueries.removeFavorite(userId, itemId).then((product) => {
     console.log("Removed as Favorite");
