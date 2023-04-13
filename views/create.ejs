@@ -3,142 +3,155 @@
   <head>
     <title>Create Post</title>
     <script defer src="/scripts/create.js"></script>
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
 
     <%- include('partials/_meta') %>
   </head>
 
   <body>
     <%- include('partials/_header') %>
-    <main class="d-flex flex-column flex-md-row gap-4 p-2">
-      <!-- Render card as you create the post -->
-      <section class="w-100">
-        <article class="card-wrapper">
-          <div class="card">
-            <div
-              id="card-img"
-              class="image-container"
-              style="background-image: url('https://picsum.photos/200/300')"
-            >
-              <button class="favorite-btn">
-                <i class="fas fa-heart"></i>
-              </button>
-              <button class="delete-btn">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-              <button class="sold-btn">
-                <i class="fa-solid fa-tag"></i>
-              </button>
-            </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <h5 id="card-title" class="card-title">?</h5>
-                <p id="card-price" class="card-text float-right">?</p>
+    <main class="d-flex flex-column gap-4 p-2">
+
+      <!-- Server side error message -->
+      <% if(error){%>
+        <div class="card text-bg-warning ">
+          <div class="card-body text-warning-subtle">
+            <i class="fa-solid fa-warning"></i></span>
+           <%= error%>
+          </div>
+        </div>
+      <%}%>
+
+      <section class="d-flex flex-column flex-md-row  gap-4 w-100">
+         <!-- Render card as you create the post -->
+        <article class="w-100">
+          <div class="card-wrapper">
+            <div class="card">
+              <div
+                class="image-container"
+              >
+                <div class="square-image">
+                  <img
+                    id="card-img"
+                    src="/images/placeholder.jpg"
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 id="card-title" class="card-title">${product.title}</h5>
+                  <p id="card-price" class="card-text float-right">
+                    $0
+                  </p>
+                </div>
               </div>
             </div>
-            <p id="card-category">Furniture</p>
-            <p id="card-description">?</p>
           </div>
         </article>
-      </section>
 
-      <!-- Form -->
-      <section class="w-100">
-        <header class="my-2">
-          <h1 class="h3">Create listing</h1>
-          <hr class="mb-0" />
-        </header>
-
-        <form
-          id="form"
-          method="POST"
-          action="/api/products"
-          class="d-flex flex-column gap-2 needs-validated"
-          novalidate
-        >
-          <div>
-            <label for="upload-image" class="form-label d-none"
-              >Upload Image</label
-            >
-            <input
-              class="form-control"
-              accept="image/png, image/jpeg"
-              type="file"
-              name="files"
-              id="upload-image"
-              enctype="multipart/form-data"
-              required
-            />
-            <div class="valid-feedback">Looks good!</div>
-            <div class="invalid-feedback">Please upload an image</div>
-          </div>
-
-          <div class="form-floating d-none">
-            <input
-              type="text"
-              class="form-control"
-              id="input-img"
-              name="input-img"
-              placeholder="image"
-              required
-            />
-            <label for="title">Image</label>
-            <div class="invalid-feedback">Please choose a valid price</div>
-          </div>
-
-          <select
-            name="category"
-            id="input-category"
-            class="form-select"
-            aria-label="Select Category"
+        <!-- Form -->
+        <div class="w-100">
+          <header class="my-2">
+            <h1 class="h3">Create listing</h1>
+            <hr class="mb-0" />
+          </header>
+          <form
+            id="form"
+            method="POST"
+            action="/api/products"
+            class="d-flex flex-column gap-2 needs-validated"
+            novalidate
           >
-            <option selected value="furnitures">Furniture</option>
-            <option value="electronics">Electronics</option>
-            <option value="toys">Toys</option>
-          </select>
+            <div>
+              <label for="upload-image" class="form-label d-none"
+                >Upload Image</label
+              >
+              <input
+                class="form-control"
+                accept="image/png, image/jpeg"
+                type="file"
+                name="files"
+                id="upload-image"
+                enctype="multipart/form-data"
+                required
+              />
+              <div class="valid-feedback">Looks good!</div>
+              <div class="invalid-feedback">Please upload an image</div>
+            </div>
 
-          <div class="form-floating">
-            <input
+            <div class="form-floating d-none">
+              <input
+                type="text"
+                class="form-control"
+                id="input-img"
+                name="img"
+                placeholder="image"
+                required
+              />
+              <label for="title">Image</label>
+              <div class="invalid-feedback">Please choose a valid price</div>
+            </div>
+
+            <select
+              name="category"
+              id="input-category"
+              class="form-select"
+              aria-label="Select Category"
+            >
+              <option selected value="furnitures">Furniture</option>
+              <option value="electronics">Electronics</option>
+              <option value="toys">Toys</option>
+            </select>
+
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="input-title"
+                name="title"
+                placeholder="Title"
+                value="Default Title"
+                required
+              />
+              <label for="title">Title</label>
+              <div class="invalid-feedback">Please choose a title</div>
+            </div>
+
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="input-price"
+                name="price"
+                pattern="^[1-9]\d*$"
+                placeholder="Price"
+                value="0"
+
+                required
+              />
+              <label for="title">Price</label>
+              <div class="invalid-feedback">Please choose a valid price</div>
+            </div>
+
+            <textarea
               type="text"
               class="form-control"
-              id="input-title"
-              name="title"
-              placeholder="Title"
+              id="input-description"
+              name="description"
+              placeholder="Add description to your listing..."
               required
-            />
-            <label for="title">Title</label>
-            <div class="invalid-feedback">Please choose a title</div>
-          </div>
+            ></textarea>
+            <div class="invalid-feedback">Please choose a description</div>
 
-          <div class="form-floating">
-            <input
-              type="text"
-              class="form-control"
-              id="input-price"
-              name="price"
-              pattern="^[1-9]\d*$"
-              placeholder="Price"
-              required
-            />
-            <label for="title">Price</label>
-            <div class="invalid-feedback">Please choose a valid price</div>
-          </div>
-
-          <textarea
-            type="text"
-            class="form-control"
-            id="input-description"
-            name="description"
-            placeholder="Add description to your listing..."
-            required
-          ></textarea>
-          <div class="invalid-feedback">Please choose a description</div>
-
-          <div class="w-100">
-            <button type="submit" class="btn btn-primary w-100">
-              Create post
-            </button>
-          </div>
-        </form>
+            <div class="w-100">
+              <button type="submit" class="btn btn-primary w-100">
+                Create post
+              </button>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
   </body>

@@ -1,9 +1,9 @@
 // Ready for post
 
 // Only works for text inputs
-function renderTextOnInput(name) {
+function renderTextOnInput(name, prefix) {
   $("#input-" + name).on("input", function (event) {
-    $("#card-" + name).text(event.target.value);
+    $("#card-" + name).text(prefix + event.target.value);
   });
 }
 
@@ -14,11 +14,11 @@ $(document).ready(function () {
   $("#card-category").text($("#input-category").val());
 
   // Listent to any inputs on page, and render
-  renderTextOnInput("title");
-  renderTextOnInput("price");
-  renderTextOnInput("description");
-  $("#input-category").change(function (event) {
-    const text = $(this).find(":selected").val();
+  renderTextOnInput("title", "");
+  renderTextOnInput("price", "$");
+  renderTextOnInput("description", "");
+  $("#input-category").change(function () {
+    const text =  $(this).find(":selected").val();
     $("#card-category").text(text);
   });
 
@@ -38,11 +38,8 @@ $(document).ready(function () {
       contentType: false,
       success: (res) => {
         // Update url for form submission
-        $("#img").val(res.data.filename);
-        $("#card-img").css(
-          "background-image",
-          "url(" + res.data.filename + ")"
-        );
+        $("#input-img").val(res.data.filename);
+        $("#card-img").attr("src", res.data.filename);
       },
       error: () => {
         console.log("Error");
