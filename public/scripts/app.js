@@ -56,8 +56,8 @@ $(document).ready(function () {
           <div class="image-container">
             <a href="/product/${product.id}">
             <div class="square-image">
-            <img src="${product.img}" class="img-fluid">
-            <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
+              <img src="${product.img}" class="img-fluid ${product.is_sold ? "sold" : ""}">
+              <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
             </div>
             </a>
             <button class="favorite-btn">
@@ -86,12 +86,12 @@ $(document).ready(function () {
       </div>
     </div>
     `);
-
+    
     // toggle sold button and call query
     $card.find(".sold-btn").on("click", function () {
       const productId = product.id;
       const isSold = !product.is_sold;
-
+      
       // Make an AJAX call to update the product
       $.ajax({
         url: `/api/products/${productId}/sold`,
@@ -101,6 +101,7 @@ $(document).ready(function () {
         success: function (response) {
           // Update the product's sold status
           product.is_sold = isSold;
+
 
           // Toggle the "SOLD" overlay text visibility
           if (isSold) {
@@ -133,6 +134,7 @@ $(document).ready(function () {
         },
       });
     });
+
     return $card;
   };
 
