@@ -101,8 +101,8 @@ const editProduct = (id) => {
 };
 
 // @desc Queries to mark one product as sold on the database by ID
-const markAsSold = (id) => {
-  return db.query(`UPDATE products SET is_sold = true WHERE id = $1;`, [id])
+const markAsSold = (id, isSold) => {
+  return db.query(`UPDATE products SET is_sold = $1 WHERE id = $2`, [isSold, id]);
 }
 
 // @desc Queries to favorite one product on the database by the user ID and item ID

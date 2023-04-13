@@ -31,7 +31,7 @@ const createCardElement = function(product) {
           <button class="delete-btn">
             <i class="fa-solid fa-xmark"></i>
           </button>
-          <button class="sold-btn">
+          <button class="sold-btn" data-id="${product.id}">
             <i class="fa-solid fa-tag"></i>
           </button>
         </div>
@@ -45,6 +45,26 @@ const createCardElement = function(product) {
     </div>
   </div>
   `);
+
+  $card.find('.sold-btn').on('click', function() {
+    const productId = product.id;
+    const isSold = !product.is_sold;
+  
+    // Make an AJAX call to update the product
+    $.ajax({
+      url: `/api/products/${productId}/sold`,
+      method: 'PUT',
+      dataType: 'json',
+      data: { is_sold: isSold },
+      success: function(response) {
+        loadProducts();
+      },
+      error: function(err) {
+        console.error('Error updating product sold status:', err);
+      }
+    });
+  });
+
   return $card;
 }
 
@@ -57,7 +77,8 @@ $(document).ready(function() {
       method: 'GET',
       dataType: 'json',
       success: function(products) {
-        renderCards(products);
+        console.log(products);
+        renderCards(products.products);
       },
       error: function(err) {
         console.error('Error fetching products:', err);
@@ -66,5 +87,6 @@ $(document).ready(function() {
   }
 
   loadProducts();
-  
+
+
 });
