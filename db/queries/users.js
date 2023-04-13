@@ -39,25 +39,34 @@ const addUser = (username, email, password) => {
 };
 
 const getUserFavorites = (id) => {
-  return db.query(`SELECT * FROM favorites WHERE user_id = $1`, [id])
-  .then((favorites) => {
-    return favorites.rows;
-  })
-  .catch((err) => {
-    console.log("error", err)
-    return err;
-  });
+  return db
+    .query(`SELECT * FROM favorites WHERE user_id = $1`, [id])
+    .then((favorites) => {
+      return favorites.rows;
+    })
+    .catch((err) => {
+      console.log("error", err);
+      return err;
+    });
 };
 
 const getUserListings = (id) => {
-  return db.query(`SELECT * FROM products WHERE user_id = $1`, [id])
-  .then((listings) => {
-    return listings.rows;
-  })
-  .catch((err) => {
-    console.log("error", err)
-    return err;
-  });
+  return db
+    .query(`SELECT * FROM products WHERE user_id = $1`, [id])
+    .then((listings) => {
+      return listings.rows;
+    })
+    .catch((err) => {
+      console.log("error", err);
+      return err;
+    });
 };
 
-module.exports = { getUsers, getUserByEmail, addUser, getUserById, getUserFavorites, getUserListings };
+module.exports = {
+  getUsers,
+  getUserByEmail,
+  addUser,
+  getUserById,
+  getUserFavorites,
+  getUserListings,
+};
