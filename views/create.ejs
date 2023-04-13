@@ -9,14 +9,16 @@
 
   <body>
     <%- include('partials/_header') %>
-
-    <% if(error){%>
     <main class="d-flex flex-column flex-md-row gap-4 p-2">
       <!-- Render card as you create the post -->
       <section class="w-100">
         <article class="card-wrapper">
           <div class="card">
-            <div id="card-img" class="image-container" style="background-image: url('https://picsum.photos/200/300')">
+            <div
+              id="card-img"
+              class="image-container"
+              style="background-image: url('https://picsum.photos/200/300')"
+            >
               <button class="favorite-btn">
                 <i class="fas fa-heart"></i>
               </button>
