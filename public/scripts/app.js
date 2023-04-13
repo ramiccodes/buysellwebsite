@@ -113,6 +113,10 @@ $(document).ready(function() {
       });
     });
 
+
+    
+
+
     return $card;
 
   }
