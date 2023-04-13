@@ -30,7 +30,7 @@ router.get("/create", (req, res) => {
     res.redirect("/auth/login");
   }
 
-  res.render("create", { isLoggedIn: userId });
+  res.render("create", { isLoggedIn: userId, error: null });
 });
 
 // @route /product/:id
