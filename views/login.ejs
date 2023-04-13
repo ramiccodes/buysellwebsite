@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Create Post</title>
+    <title>Login</title>
     <%- include('partials/_meta') %>
   </head>
 
@@ -21,6 +21,15 @@
         class="d-flex flex-column gap-2 needs-validated"
         novalidate
       >
+        <% if(error){%>
+          <div class="card text-bg-warning ">
+            <div class="card-body text-warning-subtle">
+              <i class="fa-solid fa-warning"></i></span>
+             <%= error%>
+            </div>
+          </div>
+        <%}%>
+
         <div class="input-group">
           <span class="input-group-text"> <i class="fa-solid fa-at"></i></span>
           <input
