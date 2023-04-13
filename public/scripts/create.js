@@ -38,11 +38,8 @@ $(document).ready(function () {
       contentType: false,
       success: (res) => {
         // Update url for form submission
-        $("#img").val(res.data.filename);
-        $("#card-img").css(
-          "background-image",
-          "url(" + res.data.filename + ")"
-        );
+        $("#input-img").val(res.data.filename);
+        $("#card-img").attr("src", res.data.filename);
       },
       error: () => {
         console.log("Error");

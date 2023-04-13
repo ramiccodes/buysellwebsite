@@ -9,7 +9,6 @@ const getProducts = () => {
 
 // @desc Queries arrays of product objects
 const getProductsByPage = (page) => {
-
   // Magic Number 20: Limit of products shown each page
   return db
     .query("SELECT * FROM products LIMIT 20 OFFSET $1;", [page * 20])
@@ -77,43 +76,54 @@ const deleteProduct = (id) => {
       console.log(err.message);
       return null;
     });
-}
-
+};
 
 const editProduct = (id, details) => {
-  return db
-    .query(`
+  return db.query(
+    `
     UPDATE products SET title = $1, price = $2, img = $3, description = $4, category = $5, is_sold = $6 WHERE id = $7;
     `,
-        [
-          details.title,
-          details.price,
-          details.img,
-          details.description,
-          details.category,
-          details.is_sold,
-          id
-        ]
-      )
+    [
+      details.title,
+      details.price,
+      details.img,
+      details.description,
+      details.category,
+      details.is_sold,
+      id,
+    ]
+  );
 };
 
 // @desc Queries to mark one product as sold on the database by ID
 const markAsSold = (id, isSold) => {
-  return db.query(`UPDATE products SET is_sold = $1 WHERE id = $2`, [isSold, id]);
-}
+  return db.query(`UPDATE products SET is_sold = $1 WHERE id = $2`, [
+    isSold,
+    id,
+  ]);
+};
 
 // @desc Queries to favorite one product on the database by the user ID and item ID
 const addFavorite = (userId, itemId) => {
-  return db.query(`INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *;`, [userId, itemId]);
-}
+  return db.query(
+    `INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *;`,
+    [userId, itemId]
+  );
+};
 
 const removeFavorite = (userId, itemId) => {
-  return db.query(`DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`, [userId, itemId]);
-}
+  return db.query(
+    `DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`,
+    [userId, itemId]
+  );
+};
 
 const filterByPrice = (min, max) => {
-  return db.query(`SELECT * FROM products WHERE price <= $2 AND price >= $1;`, [min, max]);
-}
+  return db.query(`SELECT * FROM products WHERE price <= $2 AND price >= $1;`, [
+    min,
+    max,
+  ]);
+};
 
 module.exports = {
   getProducts,
@@ -126,5 +136,5 @@ module.exports = {
   markAsSold,
   addFavorite,
   removeFavorite,
-  filterByPrice
+  filterByPrice,
 };
