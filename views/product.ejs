@@ -3,7 +3,7 @@
   <head>
 
     <link rel="stylesheet" href="/styles/product.css" type="text/css" />
-
+    <script defer src="/scripts/product.js"></script>
     <title>Product Page</title>
     <%- include('partials/_meta') %>
 
@@ -38,8 +38,12 @@
               <p><%= price %></p>
             </div>
           </div>
-          <form action="mailto:<%= email %>?subject=Looking to buy<%= title %>" method="POST" enctype="text/plain">
-              <textarea name="comment" class="form-control" placeholder="Message to seller"></textarea>
+          <div id="message">
+
+          </div>
+          <form data-subject="Looking for <%= title%>" data-email="<%= email %>"id="email-form">
+              <input type="email" name="from" class="form-control" >
+              <textarea name="text" placeholder="Message to seller" class="form-control"></textarea>
               <button type="submit" class="btn btn-primary mt-3">Send Email</button>
           </form>
         </div>

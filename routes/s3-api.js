@@ -2,7 +2,8 @@ const fs = require("fs");
 const multer = require("multer");
 const { uploadImage } = require("../utils/uploadImage");
 const { s3 } = require("../utils/s3");
-const router = require("./auth-api");
+const express = require("express");
+const router = express.Router();
 
 // Multer middle ware that handles form files by uploading them onto server
 // Set destination folder for uploaded file from form
