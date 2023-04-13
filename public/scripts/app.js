@@ -1,55 +1,91 @@
-let pageQuery = "?page=0";
-let filterQuery = "";
-let titleQuery = "";
-let page = 0;
-let isAdmin = false;
-let queryString = pageQuery;
+// Query object and setters for managing query state
+const query = {
+  isAdmin: false,
+  currentPage: 0,
+  page: "?page=0",
+  filters: "",
+  title: "",
+
+  setToFirstPage: function () {
+    this.currentPage = 0;
+  },
+
+  nextPage: function () {
+    this.currentPage++;
+    this.page = `?page=${this.currentPage}`;
+  },
+
+  concatenate: function () {
+    return this.page + this.filters + this.title;
+  },
+
+  set setPage(currentPage) {
+    this.currentPage = currentPage;
+    this.page = `?page=${currentPage}`;
+  },
+
+  reset: function () {
+    this.page = "?page=0";
+    this.filters = "";
+    this.title = "";
+  },
+};
 
 $(document).ready(function () {
-  // Listen to window scrolling
+  // Reset all filters, and empty out all rendered components
+  const unmountComponents = () => {
+    $("#products").empty();
+    $(`#end-message`).empty();
+  };
+
+  // Remount all products by clearing children and requesting new products
+  const remountComponents = () => {
+    unmountComponents();
+    loadProducts();
+  };
+
+  // Listen to page scroll;
   const listenScroll = () => {
-    // don't load products if not at bottom of page
-    if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
+    if ($(window).scrollTop() > $(document).height() - $(window).height() - 1) {
+      query.nextPage();
       loadProducts();
-      page++;
-      pageQuery = `?page=${page}`;
     }
   };
 
+  // Render out warning message on screen
+  const renderWarning = (message) => {
+
+    // Empty out previous message
+    $(`#end-message`).empty();
+    $("#end-message").append(`
+      <div class="card text-bg-warning ">
+        <div class="card-body d-flex justify-content-center">
+            ${message}
+        </div>
+      </div>
+    `);
+  };
+
+  // Load products onto the page
   const loadProducts = () => {
     $.ajax({
-      url: "/api/products" + pageQuery + filterQuery + titleQuery,
+      url: "/api/products" + query.concatenate(),
       method: "GET",
       dataType: "json",
-      success: function (products) {
-        // If the product is not 0, render
-        if (products.products.length === 0) {
-          $(`#end-message`).empty();
-          $("#end-message").append(`
-            <div class="card text-bg-warning ">
-              <div class="card-body d-flex justify-content-center">
-                  No more products to load!
-              </div>
-            </div>
-          `);
+      success: function ({ products }) {
+        // If there are no more products, remove event listener for the window
+        if (products.length === 0) {
+          renderWarning("No more products to load");
 
           // Remove event listener when no more products
           $(window).off();
         }
 
         // Render cards after product has been requested
-        renderCards(products.products);
+        renderCards(products);
       },
-
       error: function (err) {
-        $(`#end-message`).empty();
-        $("#end-message").append(`
-        <div class="card text-bg-warning ">
-          <div class="card-body justify-content-center">
-              Error loading products.
-          </div>
-        </div>
-      `);
+        renderWarning("Error loading products");
       },
     });
   };
@@ -63,6 +99,7 @@ $(document).ready(function () {
     }
   };
 
+  // Create and setup card element for render
   const createCardElement = function (product) {
     let $card = $(`
     <div class="col-md-6 col-sm-12 col-lg-4">
@@ -79,7 +116,7 @@ $(document).ready(function () {
               <i class="fas fa-heart"></i>
             </button>
             ${
-              isAdmin
+              query.isAdmin
                 ? `
                 <button class="delete-btn" data-id="${product.id}">
                 <i class="fa-solid fa-xmark"></i>
@@ -101,12 +138,12 @@ $(document).ready(function () {
       </div>
     </div>
     `);
-    
-    // toggle sold button and call query
+
+    // Toggle sold button and call query
     $card.find(".sold-btn").on("click", function () {
       const productId = product.id;
       const isSold = !product.is_sold;
-      
+
       // Make an AJAX call to update the product
       $.ajax({
         url: `/api/products/${productId}/sold`,
@@ -117,35 +154,33 @@ $(document).ready(function () {
           // Update the product's sold status
           product.is_sold = isSold;
 
-
           // Toggle the "SOLD" overlay text visibility
           if (isSold) {
-            $card.find(".overlay-text").text("SOLD");
-          } else {
-            $card.find(".overlay-text").text("");
+            return $card.find(".overlay-text").text("SOLD");
           }
+          $card.find(".overlay-text").text("");
         },
-        error: function (err) {
-          console.error("Error updating product sold status:", err);
+        error: function () {
+          renderWarning("Error setting to sold")
         },
       });
     });
 
-    // delete item button
+    // Handle delete on button press
     $card.find(".delete-btn").on("click", function () {
       const productId = product.id;
+
       $.ajax({
         url: `/api/products/${productId}/delete`,
         method: "DELETE",
         dataType: "json",
         success: function (response) {
           if (response.message === "Product deleted!") {
-            // Remove the card from the DOM
-            $card.remove();
+            $card.remove(); // Remove the card from the DOM
           }
         },
-        error: function (err) {
-          console.error("Error deleting product:", err);
+        error: function () {
+          renderWarning("Error deleting product")
         },
       });
     });
@@ -153,38 +188,39 @@ $(document).ready(function () {
     return $card;
   };
 
-  $(window).on("scroll", listenScroll);
-
+  // Listen on searchbar input and load products on change
   $("#searchbar").on("input", function (event) {
-    page = 0;
-    pageQuery = `?page=${page}`;
-    titleQuery = `&title=${event.target.value}`;
-    $("#products").empty();
-    $(`#end-message`).empty();
-    loadProducts();
+    query.setPage = 0;
+    query.title = `&title=${event.target.value}`;
+
+    // After setting new queries, load new products
+    remountComponents();
     $(window).on("scroll", listenScroll);
   });
 
   // Filter form init
   $("#filter-form").submit(function (event) {
     event.preventDefault();
-    event.stopPropagaton();
-    page = 0;
-    pageQuery = `?page=${page}`;
-    filterQuery = `&${$(this).serialize()}`;
-    $("#products").empty();
-    loadProducts();
+    event.stopPropagation();
+    query.setPage = 0;
+    query.filters = `&${$(this).serialize()}`;
+
+    // After seting up new queries, load new products
+    remountComponents();
   });
 
-  // Load admin
+  // Check if logged in user is admin
   $.ajax({
     url: `/api/auth/admin`,
     method: "GET",
     success: function (response) {
       // Check user session id to see if they are admin
-      isAdmin = response.isAdmin;
+      query.isAdmin = response.isAdmin;
       loadProducts();
     },
     error: function (err) {},
   });
+
+  // Mount listener for scrolling
+  $(window).on("scroll", listenScroll);
 });
