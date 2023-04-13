@@ -15,6 +15,15 @@
         <hr class="mb-0" />
       </header>
 
+      <% if(error){%>
+        <div class="card text-bg-warning ">
+          <div class="card-body text-warning-subtle">
+            <i class="fa-solid fa-warning"></i></span>
+           <%= error%>
+          </div>
+        </div>
+      <%}%>
+
       <!-- Signup Form -->
       <form
         id="form"

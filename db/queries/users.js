@@ -31,7 +31,6 @@ const addUser = (username, email, password) => {
       [username, email, password, false]
     )
     .then((data) => {
-      console.log(data)
       return data.rows[0];
     })
     .catch((err) => {

@@ -6,22 +6,21 @@
  */
 
 const express = require("express");
-
 const productQueries = require("../db/queries/products");
 const { getUserById } = require("../db/queries/users");
-
 const router = express.Router();
 
 // @desc Returns all products from database
-// @route /api/products
+// @route /api/product
+// @query ?page=1
 // @method GET
 
 router.get("/", (req, res) => {
-  let page = 0
+  let page = 0;
 
   // If query string exists then set page to selected page
   if (req.query.page) {
-    page = Number(req.query.page)
+    page = Number(req.query.page);
   }
 
   productQueries
@@ -55,7 +54,7 @@ router.get("/:id", (req, res) => {
 // @method POST
 
 router.post("/", (req, res) => {
-  const { title, price, description, img } = req.body;
+  const { title, price, category, description, img } = req.body;
   const userId = req.session.user_id;
 
   if (!userId) {
@@ -63,6 +62,23 @@ router.post("/", (req, res) => {
       success: false,
       message: "Not valid user",
     });
+  }
+
+  // Error handling for creating post
+  if (!title) {
+    res.redirect("/product/create");
+  }
+
+  if (!description) {
+    res.redirect("/product/create");
+  }
+
+  if (!img) {
+    res.redirect("/product/create");
+  }
+
+  if (!price) {
+    res.redirect("/product/create");
   }
 
   // If id was found, then search for user
@@ -77,7 +93,7 @@ router.post("/", (req, res) => {
       }
 
       // Check if user is not admin
-      if (!user.isAdmin) {
+      if (!user.is_admin) {
         res.status(404).json({
           success: false,
           message: "Not admin",
@@ -87,10 +103,10 @@ router.post("/", (req, res) => {
       return {
         title,
         price,
+        category,
         description,
         img: img,
         user_id: user.id,
-        category: "",
         is_sold: false,
       };
     })
@@ -98,10 +114,10 @@ router.post("/", (req, res) => {
       return productQueries.addProduct(data);
     })
     .then((result) => {
-      return "pog"
+      res.redirect("/");
     })
     .catch((err) => {
-      return "..."
+      res.redirect("/product/create");
     });
 });
 

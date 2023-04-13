@@ -24,9 +24,11 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/product">Home</a>
           </li>
+          <% %> <% if(isLoggedIn) { %>
           <li class="nav-item">
             <a class="nav-link" href="/product/create"> Create new post </a>
           </li>
+          <% } %>
           <hr class="divider-menu" />
           <% if(!isLoggedIn) { %>
           <li class="nav-item">
