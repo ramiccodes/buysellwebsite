@@ -7,7 +7,7 @@
 
 const express = require("express");
 const router = express.Router();
-const { getUserById, getUsers, getUserFavorites } = require("../db/queries/users");
+const { getUserById, getUsers, getUserFavorites, getUserListings } = require("../db/queries/users");
 
 // @desc Gets all users from database
 // @route /api/users
@@ -23,12 +23,29 @@ router.get("/", (req, res) => {
     });
 });
 
+// @desc Gets all of the user's listings from database
+// @route /api/users/listings
+// @method GET
+
+router.get("/listings", (req, res) => {
+  const userId = req.session["user_id"];
+  getUserListings(userId)
+    .then((listings) => {
+      // res.render("listings") //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
+      res.json({listings});
+    })
+    .catch((err) => {
+      console.log("error", err)
+      res.status(500).json({ error: err.message });
+    });
+})
+
 // @desc Gets one user from database
 // @route /api/users/:id
 // @method GET
 
 router.get("/:id", (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.id
 
   getUserById(userId)
     .then((user) => {
@@ -44,12 +61,15 @@ router.get("/:id", (req, res) => {
 // @method GET
 
 router.get("/:id/favorite", (req, res) => {
-  const userId = req.session['userId'];
-
+  const userId = req.session["user_id"];
   getUserFavorites(userId)
     .then((favorites) => {
-      res.redirect("/favorites") //PLACEHOLDER ROUTE UNTIL FAVORITES VIEW GETS MADE
+      res.json({favorites}); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
     })
+    .catch((err) => {
+      console.log("error", err)
+      res.status(500).json({ error: err.message });
+    });
 })
 
 module.exports = router;
