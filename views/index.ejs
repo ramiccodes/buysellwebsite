@@ -54,10 +54,10 @@
         class="collapse rounded border-dark-subtle border border-1"
         id="filter-form"
       >
-        <div class="p-3 m-0">
+        <div class="d-flex flex-column gap-2 p-3 m-0">
 
           <!-- Filters by category -->
-            <select name="category" id="category" class="mb-2 form-select" aria-label="Select Category">
+            <select name="category" id="category" class=" form-select" aria-label="Select Category">
               <option selected value="furnitures">Furniture</option>
               <option value="electronics">Electronics</option>
               <option value="toys">Toys</option>
@@ -72,6 +72,7 @@
                 <input
                   id="price-min"
                   type="text"
+                  name="min"
                   class="form-control input-dark"
                   placeholder="Min price"
                 />
@@ -83,11 +84,13 @@
                 <input
                   id="price-max"
                   type="text"
+                  name="max"
                   class="form-control"
                   placeholder="Max price"
                 />
               </div>
             </fieldset>
+            <button type="submit" class="btn btn-primary">Filter</button>
           </div>
         </form>
       </div>

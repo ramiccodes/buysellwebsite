@@ -16,19 +16,35 @@ const router = express.Router();
 // @method GET
 
 router.get("/", (req, res) => {
-  let page = 0;
+  const { page, min, max, category } = req.query;
+
+  // Set default options
+  const options = {
+    page: 0,
+  };
 
   // If query string exists then set page to selected page
-  if (req.query.page) {
-    page = Number(req.query.page);
+  if (page >= 0 || page) {
+    options.page = Number(page);
   }
 
-  const options = {
+  // If query string exists then set page to selected page
+  if (min) {
+    options.min = min;
+  }
 
+  // If query string exists then set page to selected page
+  if (max) {
+    options.max = max;
+  }
+
+  // If query string exists then set page to selected page
+  if (category) {
+    options.max = max;
   }
 
   productQueries
-    .getProductsByPage(page, options)
+    .getProducts(options)
     .then((products) => {
       res.json({ products });
     })
@@ -93,7 +109,10 @@ router.post("/", (req, res) => {
     .then((user) => {
       // If id could not be associated with another user
       if (!user) {
-        res.render("login", {isLoggedIn: false, error: "Not authorized to view page"})
+        res.render("login", {
+          isLoggedIn: false,
+          error: "Not authorized to view page",
+        });
       }
 
       return {

@@ -1,20 +1,34 @@
 const db = require("../connection");
 
 // @desc Queries arrays of product objects
-const getProducts = () => {
-  return db.query("SELECT * FROM products;").then((data) => {
+const getProducts = (options) => {
+  // Hard page limit per load
+  const PAGE_LIMIT = 20;
+  const { page, min, max, category } = options;
+
+  // Variables relating to querying by option provided
+  let variableIndex = 1;
+  let params = [];
+  let queryString = "SELECT * FROM products ";
+
+  // Limit per page
+  if (page >= 0 || page) {
+    params.push(page * 20);
+    queryString += `LIMIT ${PAGE_LIMIT} OFFSET $${variableIndex} `;
+    variableIndex++;
+  }
+
+  // Filter by Price
+  if(min && max){
+    params.push(min)
+    params.push(max)
+    queryString += `WHERE price >= $${variableIndex} AND price <= $${variableIndex + 1}`
+    variableIndex += 2
+  }
+
+  return db.query(queryString, params).then((data) => {
     return data.rows;
   });
-};
-
-// @desc Queries arrays of product objects
-const getProductsByPage = (page, options) => {
-  // Magic Number 20: Limit of products shown each page
-  return db
-    .query("SELECT * FROM products LIMIT 20 OFFSET $1;", [page * 20])
-    .then((data) => {
-      return data.rows;
-    });
 };
 
 // @desc Queries one product object by Id
@@ -127,7 +141,6 @@ const filterByPrice = (min, max) => {
 
 module.exports = {
   getProducts,
-  getProductsByPage,
   getProductWithUserById,
   getProductById,
   addProduct,

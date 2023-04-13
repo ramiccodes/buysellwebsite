@@ -1,5 +1,6 @@
 let page = 0;
 let isAdmin = false;
+let queryString =
 
 $(document).ready(function () {
   const loadProducts = () => {
@@ -117,7 +118,6 @@ $(document).ready(function () {
     // delete item button
     $card.find(".delete-btn").on("click", function () {
       const productId = product.id;
-
       $.ajax({
         url: `/api/products/${productId}/delete`,
         method: "DELETE",
@@ -140,8 +140,15 @@ $(document).ready(function () {
   $(window).on("scroll", function (event) {
     // don't load products if not at bottom of page
     if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
+      // window.history.pushState("product", "Home Page", `/product?page=${page}`);
       loadProducts();
     }
+  });
+
+  // Filter form init
+  $("#filter-form").submit(function (event) {
+    event.preventDefault();
+    console.log($(this).serialize());
   });
 
   // Load admin
@@ -149,13 +156,10 @@ $(document).ready(function () {
     url: `/api/auth/admin`,
     method: "GET",
     success: function (response) {
-
       // Check user session id to see if they are admin
       isAdmin = response.isAdmin;
       loadProducts();
     },
-    error: function (err) {
-
-    },
+    error: function (err) {},
   });
 });
