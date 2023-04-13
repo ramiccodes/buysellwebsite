@@ -128,11 +128,25 @@ router.post("/:id/edit"),
 // @desc Marks a product as sold on the database
 // @route /api/products/:id/sold
 // @method POST
-router.post("/:id/sold", (req, res) => {
-  productQueries.markAsSold(req.params.id).then((product) => {
-    console.log("Marked as Sold");
-    res.redirect("/product");
-  });
+
+// router.post("/:id/sold", (req, res) => {
+//   productQueries.markAsSold(req.params.id).then((product) => {
+//     console.log("Marked as Sold");
+//     res.redirect("/product");
+//   });
+// });
+
+router.put("/:id/sold", (req, res) => {
+  const { id } = req.params;
+  const { is_sold } = req.body;
+  
+  productQueries.markAsSold(id, is_sold)
+    .then((product) => {
+      res.json({ success: true });
+    })
+    .catch((err) => {
+      res.status(500).json({ success: false, error: err });
+    });
 });
 
 // @desc Marks a product as a user's favorite on the database
