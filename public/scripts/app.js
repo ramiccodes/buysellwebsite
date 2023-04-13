@@ -20,7 +20,7 @@ $(document).ready(function() {
     $(".cards").empty().addClass("row");
     for (const product of products) {
       const cardElement = createCardElement(product);
-      $(".cards").prepend(cardElement);
+      $(".cards").append(cardElement);
     }
   }
 
@@ -37,7 +37,7 @@ $(document).ready(function() {
             <button class="favorite-btn">
               <i class="fas fa-heart"></i>
             </button>
-            <button class="delete-btn">
+            <button class="delete-btn" data-id="${product.id}">
               <i class="fa-solid fa-xmark"></i>
             </button>
             <button class="sold-btn" data-id="${product.id}">
@@ -55,21 +55,29 @@ $(document).ready(function() {
     </div>
     `);
   
+
+    // toggle sold button and call query
+
+
     $card.find('.sold-btn').on('click', function() {
       const productId = product.id;
       const isSold = !product.is_sold;
     
       // Make an AJAX call to update the product
+
       $.ajax({
         url: `/api/products/${productId}/sold`,
         method: 'PUT',
         dataType: 'json',
         data: { is_sold: isSold },
         success: function(response) {
+
           // Update the product's sold status
+        
           product.is_sold = isSold;
     
           // Toggle the "SOLD" overlay text visibility
+
           if (isSold) {
             $card.find('.overlay-text').text('SOLD');
           } else {
@@ -81,7 +89,32 @@ $(document).ready(function() {
         }
       });
     });
+
+
+    // delete item button
+
+
+    $card.find('.delete-btn').on('click', function() {
+      const productId = product.id;
+    
+      $.ajax({
+        url: `/api/products/${productId}/delete`,
+        method: 'DELETE',
+        dataType: 'json',
+        success: function(response) {
+          if (response.message === "Product deleted!") {
+            // Remove the card from the DOM
+            $card.remove();
+          }
+        },
+        error: function(err) {
+          console.error('Error deleting product:', err);
+        }
+      });
+    });
+
     return $card;
+
   }
 
   loadProducts();

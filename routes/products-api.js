@@ -109,10 +109,10 @@ router.post("/", (req, res) => {
 // @route /api/products/:id/delete
 // @method POST
 
-router.post("/:id/delete", (req, res) => {
+router.delete("/:id/delete", (req, res) => {
   const productId = req.params.id;
   productQueries.deleteProduct(productId).then(() => {
-    res.status(200).send("Product deleted!");
+    res.status(200).json({ message: "Product deleted!" });
   });
 });
 
