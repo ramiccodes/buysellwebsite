@@ -108,15 +108,11 @@ router.post("/signup", (req, res) => {
             error: "Error adding user",
           });
         });
-
-      // If all checks passes, then login user with provided user
-      req.session.user_id = user.id;
-      res.redirect("/product");
     })
 
     // Catch any remaning errors
     .catch(() => {
-      res.render("login", { isLoggedIn: false, error: "Error finding user" });
+      res.render("signup", { isLoggedIn: false, error: "Error finding user" });
     });
 });
 

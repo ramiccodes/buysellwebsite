@@ -57,8 +57,6 @@ router.post("/", (req, res) => {
   const { title, price, category, description, img } = req.body;
   const userId = req.session.user_id;
 
-  console.log(req.body)
-
   if (!userId) {
     res.redirect("/auth/login", {
       isLoggedIn: userId,
@@ -91,10 +89,7 @@ router.post("/", (req, res) => {
     .then((user) => {
       // If id could not be associated with another user
       if (!user) {
-        res.status(404).json({
-          success: false,
-          message: "Could not find user with id",
-        });
+        res.render("login", {isLoggedIn: false, error: "Not authorized to view page"})
       }
 
       return {
@@ -109,13 +104,12 @@ router.post("/", (req, res) => {
     })
 
     .then((data) => {
-      console.log(data)
       return productQueries.addProduct(data);
     })
-    .then((result) => {
+    .then(() => {
       res.redirect("/");
     })
-    .catch((err) => {
+    .catch(() => {
       res.redirect("create", {
         isLoggedIn: userId,
         error: "Please provide price",

@@ -1,39 +1,54 @@
+let page = 0;
 
-$(document).ready(function() {
-
+$(document).ready(function () {
   const loadProducts = () => {
     $.ajax({
-      url: '/api/products',
-      method: 'GET',
-      dataType: 'json',
-      success: function(products) {
-        console.log(products);
+      url: `/api/products?page=${page}`,
+      method: "GET",
+      dataType: "json",
+      success: function (products) {
+        // If the product is not 0, render
+        if (products.products.length === 0) {
+          $("#end-message").append(`
+            <div class="card text-bg-warning ">
+              <div class="card-body text-warning-subtle">
+                <i class="fa-solid fa-warning"></i></span>
+                  No more products to load!
+              </div>
+            </div>
+          `);
+          $(window).off();
+        }
         renderCards(products.products);
+        page++;
       },
-      error: function(err) {
-        console.error('Error fetching products:', err);
-      }
+      error: function (err) {
+        console.error("Error fetching products:", err);
+      },
     });
-  }
+  };
 
-  const renderCards = function(products) {
-    $(".cards").empty().addClass("row");
+  // Render cards on the index page
+  const renderCards = function (products) {
+    $(".cards").addClass("row");
     for (const product of products) {
       const cardElement = createCardElement(product);
       $(".cards").append(cardElement);
     }
-  }
+  };
 
-  const createCardElement = function(product) {
+  const createCardElement = function (product) {
     let $card = $(`
     <div class="col-md-6 col-sm-12 col-lg-4">
       <div class="card-wrapper">
         <div class="card">
           <div class="image-container">
+            <a href="/product/${product.id}">
             <div class="square-image">
-              <img src="${product.img}" class="img-fluid">
-              <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
+            <img src="${product.img}" class="img-fluid">
+            <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
             </div>
+            </a>
             <button class="favorite-btn">
               <i class="fas fa-heart"></i>
             </button>
@@ -54,73 +69,65 @@ $(document).ready(function() {
       </div>
     </div>
     `);
-  
 
     // toggle sold button and call query
-
-
-    $card.find('.sold-btn').on('click', function() {
+    $card.find(".sold-btn").on("click", function () {
       const productId = product.id;
       const isSold = !product.is_sold;
-    
-      // Make an AJAX call to update the product
 
+      // Make an AJAX call to update the product
       $.ajax({
         url: `/api/products/${productId}/sold`,
-        method: 'PUT',
-        dataType: 'json',
+        method: "PUT",
+        dataType: "json",
         data: { is_sold: isSold },
-        success: function(response) {
-
+        success: function (response) {
           // Update the product's sold status
-        
           product.is_sold = isSold;
-    
-          // Toggle the "SOLD" overlay text visibility
 
+          // Toggle the "SOLD" overlay text visibility
           if (isSold) {
-            $card.find('.overlay-text').text('SOLD');
+            $card.find(".overlay-text").text("SOLD");
           } else {
-            $card.find('.overlay-text').text('');
+            $card.find(".overlay-text").text("");
           }
         },
-        error: function(err) {
-          console.error('Error updating product sold status:', err);
-        }
+        error: function (err) {
+          console.error("Error updating product sold status:", err);
+        },
       });
     });
 
-
     // delete item button
-
-
-    $card.find('.delete-btn').on('click', function() {
+    $card.find(".delete-btn").on("click", function () {
       const productId = product.id;
-    
+
       $.ajax({
         url: `/api/products/${productId}/delete`,
-        method: 'DELETE',
-        dataType: 'json',
-        success: function(response) {
+        method: "DELETE",
+        dataType: "json",
+        success: function (response) {
           if (response.message === "Product deleted!") {
             // Remove the card from the DOM
             $card.remove();
           }
         },
-        error: function(err) {
-          console.error('Error deleting product:', err);
-        }
+        error: function (err) {
+          console.error("Error deleting product:", err);
+        },
       });
     });
-
-
-    
-
-
     return $card;
+  };
 
-  }
+  // Listen to window scrolling
+  $(window).on("scroll", function (event) {
+
+    // don't load products if not at bottom of page
+    if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
+      loadProducts();
+    }
+  });
 
   loadProducts();
-
 });
