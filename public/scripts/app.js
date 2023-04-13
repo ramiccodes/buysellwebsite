@@ -34,7 +34,7 @@ $(document).ready(function() {
               <img src="${product.img}" class="img-fluid">
               <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
             </div>
-            <button class="favorite-btn">
+            <button class="favorite-btn" data-id="${product.id}">
               <i class="fas fa-heart"></i>
             </button>
             <button class="delete-btn" data-id="${product.id}">
@@ -112,6 +112,30 @@ $(document).ready(function() {
         }
       });
     });
+
+    // add favorite
+
+    $card.find('.favorite-btn').on('click', function() {
+      const productId = product.id;
+      const userID = // batman
+
+      $.ajax({
+        url: `/api/products/${productId}/favorite`,
+        method: 'POST',
+        dataType: 'json',
+        data: { userID },
+        success: function(response) {
+          console.log("added")
+          
+        },
+        error: function(err) {
+          console.error('Error deleting product:', err);
+        }
+      });
+
+
+    });
+
 
 
     
