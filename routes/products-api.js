@@ -58,27 +58,27 @@ router.post("/", (req, res) => {
   const userId = req.session.user_id;
 
   if (!userId) {
-    res.status(404).json({
-      success: false,
-      message: "Not valid user",
+    res.redirect("/auth/login", {
+      isLoggedIn: userId,
+      error: "Please login first before accessing this page.",
     });
   }
 
   // Error handling for creating post
   if (!title) {
-    res.redirect("/product/create");
+    res.render("/product/create", { error: "Please provide title" });
   }
 
   if (!description) {
-    res.redirect("/product/create");
+    res.render("/product/create", { error: "Please provide description" });
   }
 
   if (!img) {
-    res.redirect("/product/create");
+    res.render("/product/create", { error: "Please provide image" });
   }
 
   if (!price) {
-    res.redirect("/product/create");
+    res.render("/product/create", { error: "Please provide price" });
   }
 
   // If id was found, then search for user
