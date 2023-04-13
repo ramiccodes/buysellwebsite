@@ -31,7 +31,7 @@ const getProductById = (id) => {
 const getProductWithUserById = (id) => {
   return db
     .query(
-      "SELECT * FROM products JOIN users ON (users.id=products.user_id) WHERE products.id = $1",
+      "SELECT products.id as product_id, * FROM products JOIN users ON (users.id=products.user_id) WHERE products.id = $1",
       [id]
     )
     .then((data) => {
@@ -80,19 +80,18 @@ const deleteProduct = (id) => {
 }
 
 
-const editProduct = (id) => {
-  const { title, price, img, description, category, is_sold } = req.body;
+const editProduct = (id, details) => {
   return db
     .query(`
     UPDATE products SET title = $1, price = $2, img = $3, description = $4, category = $5, is_sold = $6 WHERE id = $7;
     `,
         [
-          title,
-          price,
-          img,
-          description,
-          category,
-          is_sold,
+          details.title,
+          details.price,
+          details.img,
+          details.description,
+          details.category,
+          details.is_sold,
           id
         ]
       )

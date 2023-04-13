@@ -132,14 +132,15 @@ router.post("/:id/delete", (req, res) => {
   });
 });
 
-// Need fixing
-router.post("/:id/edit"),
+
+router.post("/:id/edit",
   (req, res) => {
-    // const productDetails = req.body;
-    productQueries.editProduct(req.params.id).then((product) => {
+    const { title, price, img, description, category, is_sold } = req.body;
+    const productDetails = req.body;
+    productQueries.editProduct(req.params.id, productDetails).then((product) => {
       res.redirect("/product");
     });
-  };
+  });
 
 // @desc Marks a product as sold on the database
 // @route /api/products/:id/sold
@@ -155,7 +156,7 @@ router.post("/:id/sold", (req, res) => {
 // @route /api/products/:id/favorite
 // @method POST
 router.post("/:id/favorite", (req, res) => {
-  const userId = req.session["userId"];
+  const userId = req.session["user_id"];
   const itemId = req.params.id;
   productQueries.addFavorite(userId, itemId).then((product) => {
     console.log("Marked as Favorite");
@@ -166,8 +167,9 @@ router.post("/:id/favorite", (req, res) => {
 // @desc Removes a product as a user's favorite on the database
 // @route /api/products/:id/favorite/delete
 // @method POST
+// This one needs to be fixed
 router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session["userId"];
+  const userId = req.session["user_id"];
   const itemId = req.params.id;
   productQueries.removeFavorite(userId, itemId).then((product) => {
     console.log("Removed as Favorite");
