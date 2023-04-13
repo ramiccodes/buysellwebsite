@@ -17,6 +17,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   const { page, min, max, category } = req.query;
+  console.log(req.query)
 
   // Set default options
   const options = {
@@ -40,7 +41,7 @@ router.get("/", (req, res) => {
 
   // If query string exists then set page to selected page
   if (category) {
-    options.max = max;
+    options.category = category;
   }
 
   productQueries

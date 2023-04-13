@@ -1,16 +1,19 @@
+let pageQuery = "?page=0";
+let filterQuery = "";
 let page = 0;
 let isAdmin = false;
-let queryString =
+let queryString = pageQuery;
 
 $(document).ready(function () {
   const loadProducts = () => {
     $.ajax({
-      url: `/api/products?page=${page}`,
+      url: "/api/products" + pageQuery + filterQuery,
       method: "GET",
       dataType: "json",
       success: function (products) {
         // If the product is not 0, render
         if (products.products.length === 0) {
+          $(`#end-message`).empty();
           $("#end-message").append(`
             <div class="card text-bg-warning ">
               <div class="card-body d-flex justify-content-center">
@@ -26,8 +29,10 @@ $(document).ready(function () {
         // Render cards after product has been requested
         renderCards(products.products);
         page++;
+        pageQuery = `?page=${page}`;
       },
       error: function (err) {
+        $(`#end-message`).empty();
         $("#end-message").append(`
         <div class="card text-bg-warning ">
           <div class="card-body justify-content-center">
@@ -142,7 +147,6 @@ $(document).ready(function () {
   $(window).on("scroll", function (event) {
     // don't load products if not at bottom of page
     if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
-      // window.history.pushState("product", "Home Page", `/product?page=${page}`);
       loadProducts();
     }
   });
@@ -150,7 +154,11 @@ $(document).ready(function () {
   // Filter form init
   $("#filter-form").submit(function (event) {
     event.preventDefault();
-    console.log($(this).serialize());
+    page = 0;
+    pageQuery = `?page=${page}`;
+    filterQuery = `&${$(this).serialize()}`;
+    $("#products").empty();
+    loadProducts();
   });
 
   // Load admin
