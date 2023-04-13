@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
+
+    <!-- App JS -->
+    <script type="text/javascript" src="../public/scripts/app.js"></script>
+
     <title>Home Page</title>
     <%- include('partials/_meta') %>
   </head>
@@ -85,43 +92,13 @@
         </form>
       </div>
 
-      <!-- Render product cards -->
-      <main>
+      <!-- Render product cards (sample placeholder) -->
+      <main> 
         <div class="container">
-
           <div class="row">
-            <div class="col-3">
-              <div class="card">
-                <img scr="/images/productsample.jpg" class=""card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title">Rare cards</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="card">
-                <img scr="/images/productsample.jpg" class=""card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title">Rare cards</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="card">
-                <img scr="/images/productsample.jpg" class=""card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title">Rare cards</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="card">
-                <img scr="/images/productsample.jpg" class=""card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title">Rare cards</h5>
-                </div>
-              </div>
-            </div>          
+         
+            <section class="cards"></section>
+            
           </div>
         </div>
       </main>
