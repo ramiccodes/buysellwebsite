@@ -23,8 +23,12 @@ router.get("/", (req, res) => {
     page = Number(req.query.page);
   }
 
+  const options = {
+
+  }
+
   productQueries
-    .getProductsByPage(page)
+    .getProductsByPage(page, options)
     .then((products) => {
       res.json({ products });
     })

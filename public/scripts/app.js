@@ -1,4 +1,5 @@
 let page = 0;
+let isAdmin = false;
 
 $(document).ready(function () {
   const loadProducts = () => {
@@ -11,19 +12,28 @@ $(document).ready(function () {
         if (products.products.length === 0) {
           $("#end-message").append(`
             <div class="card text-bg-warning ">
-              <div class="card-body text-warning-subtle">
-                <i class="fa-solid fa-warning"></i></span>
+              <div class="card-body d-flex justify-content-center">
                   No more products to load!
               </div>
             </div>
           `);
+
+          // Remove event listener when no more products
           $(window).off();
         }
+
+        // Render cards after product has been requested
         renderCards(products.products);
         page++;
       },
       error: function (err) {
-        console.error("Error fetching products:", err);
+        $("#end-message").append(`
+        <div class="card text-bg-warning ">
+          <div class="card-body justify-content-center">
+              Error loading products.
+          </div>
+        </div>
+      `);
       },
     });
   };
@@ -52,12 +62,18 @@ $(document).ready(function () {
             <button class="favorite-btn">
               <i class="fas fa-heart"></i>
             </button>
-            <button class="delete-btn" data-id="${product.id}">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <button class="sold-btn" data-id="${product.id}">
-              <i class="fa-solid fa-tag"></i>
-            </button>
+            ${
+              isAdmin
+                ? `
+                <button class="delete-btn" data-id="${product.id}">
+                <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button class="sold-btn" data-id="${product.id}">
+                  <i class="fa-solid fa-tag"></i>
+                </button>
+              `
+                : ""
+            }
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-between">
@@ -122,12 +138,24 @@ $(document).ready(function () {
 
   // Listen to window scrolling
   $(window).on("scroll", function (event) {
-
     // don't load products if not at bottom of page
     if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
       loadProducts();
     }
   });
 
-  loadProducts();
+  // Load admin
+  $.ajax({
+    url: `/api/auth/admin`,
+    method: "GET",
+    success: function (response) {
+
+      // Check user session id to see if they are admin
+      isAdmin = response.isAdmin;
+      loadProducts();
+    },
+    error: function (err) {
+
+    },
+  });
 });

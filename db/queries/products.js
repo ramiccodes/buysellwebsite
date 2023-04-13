@@ -8,7 +8,7 @@ const getProducts = () => {
 };
 
 // @desc Queries arrays of product objects
-const getProductsByPage = (page) => {
+const getProductsByPage = (page, options) => {
   // Magic Number 20: Limit of products shown each page
   return db
     .query("SELECT * FROM products LIMIT 20 OFFSET $1;", [page * 20])

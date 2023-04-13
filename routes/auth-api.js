@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
-const { addUser, getUserByEmail } = require("../db/queries/users");
+const { addUser, getUserByEmail, getUserById } = require("../db/queries/users");
 
 // @desc Login user with cookie session
 // @route /api/auth/
@@ -123,6 +123,26 @@ router.post("/signup", (req, res) => {
 router.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/login");
+});
+
+// @route /auth/admin
+// @desc Check if user is admin
+// @method GET
+
+router.get("/admin", (req, res) => {
+  const userId = req.session.user_id;
+
+  // If user is not logged in, just return false
+  if (!userId){
+    res.send({ isAdmin: false });
+  }
+
+  // Check user information
+  getUserById(userId).then((user) => {
+    res.send({ isAdmin: user.is_admin });
+  }).catch(()=>{
+    res.send({ isAdmin: false });
+  })
 });
 
 module.exports = router;
