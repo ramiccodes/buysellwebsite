@@ -31,7 +31,7 @@ $(document).ready(function() {
         <div class="card">
           <div class="image-container">
             <div class="square-image">
-              <img src="${product.img}" class="img-fluid">
+              <img src="${product.img}" class="img-fluid ${product.is_sold ? "sold" : ""}">
               <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
             </div>
             <button class="favorite-btn">
@@ -54,7 +54,7 @@ $(document).ready(function() {
       </div>
     </div>
     `);
-  
+
 
     // toggle sold button and call query
 
@@ -62,7 +62,7 @@ $(document).ready(function() {
     $card.find('.sold-btn').on('click', function() {
       const productId = product.id;
       const isSold = !product.is_sold;
-    
+
       // Make an AJAX call to update the product
 
       $.ajax({
@@ -73,15 +73,17 @@ $(document).ready(function() {
         success: function(response) {
 
           // Update the product's sold status
-        
+
           product.is_sold = isSold;
-    
+
           // Toggle the "SOLD" overlay text visibility
 
           if (isSold) {
             $card.find('.overlay-text').text('SOLD');
+            $card.find('.img-fluid').addClass('sold');
           } else {
             $card.find('.overlay-text').text('');
+            $card.find('.img-fluid').removeClass('sold');
           }
         },
         error: function(err) {
@@ -96,7 +98,7 @@ $(document).ready(function() {
 
     $card.find('.delete-btn').on('click', function() {
       const productId = product.id;
-    
+
       $.ajax({
         url: `/api/products/${productId}/delete`,
         method: 'DELETE',
@@ -114,7 +116,7 @@ $(document).ready(function() {
     });
 
 
-    
+
 
 
     return $card;
