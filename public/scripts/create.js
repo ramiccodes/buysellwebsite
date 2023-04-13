@@ -1,32 +1,28 @@
 // Ready for post
-let imgUrl = "";
+
+// Only works for text inputs
+function renderTextOnInput(name) {
+  $("#input-" + name).on("input", function (event) {
+    $("#card-" + name).text(event.target.value);
+  });
+}
 
 $(document).ready(function () {
-  $("#form").submit(function (event) {
+  // If page reloads, it should take the values inside the input
+  $("#card-title").text($("#input-title").val());
+  $("#card-price").text("$" + $("#input-price").val());
+  $("#card-category").text($("#input-category").val());
 
-    // Bootstrap validation
-    event.preventDefault();
-    event.stopPropagation();
-    this.classList.add("was-validated");
-
-    // Adds img URL to the end of the serialized string
-    let queryString = `${$(this).serialize()}&img=${imgUrl}`;
-
-    if (this.checkValidity()) {
-      $.ajax({
-        method: "POST",
-        url: "/api/products",
-        data: queryString,
-        success: (res) => {
-          console.log(res);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
+  // Listent to any inputs on page, and render
+  renderTextOnInput("title");
+  renderTextOnInput("price");
+  renderTextOnInput("description");
+  $("#input-category").change(function (event) {
+    const text = $(this).find(":selected").val();
+    $("#card-category").text(text);
   });
 
+  // Upload image on form input
   $("#upload-image").change(function (event) {
     // Gets file from form, and formats it for POST
     file = event.target.files[0];
@@ -42,7 +38,11 @@ $(document).ready(function () {
       contentType: false,
       success: (res) => {
         // Update url for form submission
-        imgUrl = res.data.filename;
+        $("#img").val(res.data.filename);
+        $("#card-img").css(
+          "background-image",
+          "url(" + res.data.filename + ")"
+        );
       },
       error: () => {
         console.log("Error");

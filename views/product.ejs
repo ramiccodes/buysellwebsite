@@ -38,15 +38,9 @@
               <p><%= price %></p>
             </div>
           </div>
-          <form>
-            <div class="mb-3">
-              <label for="email" class="form-label">Contact <%= username %> • <%= email %></label>
-              <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            </div>
-            <div class="input-group">
-              <textarea class="form-control" placeholder="message to seller"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Send Email</button>
+          <form action="mailto:<%= email %>?subject=Looking to buy<%= title %>" method="POST" enctype="text/plain">
+              <textarea name="comment" class="form-control" placeholder="Message to seller"></textarea>
+              <button type="submit" class="btn btn-primary mt-3">Send Email</button>
           </form>
         </div>
       </div>

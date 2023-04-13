@@ -59,8 +59,6 @@ const addProduct = (product) => {
       ]
     )
     .then((results) => {
-      console.log("Sucess")
-
       return results.rows;
     })
     .catch((err) => {

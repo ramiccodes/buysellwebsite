@@ -20,7 +20,7 @@ router.get("/signup", (req, res) => {
     res.redirect("/");
   }
 
-  const templateVars = { isLoggedIn };
+  const templateVars = { isLoggedIn, error: null };
   res.render("signup", templateVars);
 });
 
@@ -36,7 +36,7 @@ router.get("/login", (req, res) => {
     res.redirect("/");
   }
 
-  const templateVars = { isLoggedIn };
+  const templateVars = { isLoggedIn, error: null };
   res.render("login", templateVars);
 });
 
