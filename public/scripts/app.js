@@ -1,13 +1,24 @@
 let pageQuery = "?page=0";
 let filterQuery = "";
+let titleQuery = "";
 let page = 0;
 let isAdmin = false;
 let queryString = pageQuery;
 
 $(document).ready(function () {
+  // Listen to window scrolling
+  const listenScroll = () => {
+    // don't load products if not at bottom of page
+    if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
+      loadProducts();
+      page++;
+      pageQuery = `?page=${page}`;
+    }
+  };
+
   const loadProducts = () => {
     $.ajax({
-      url: "/api/products" + pageQuery + filterQuery,
+      url: "/api/products" + pageQuery + filterQuery + titleQuery,
       method: "GET",
       dataType: "json",
       success: function (products) {
@@ -28,9 +39,8 @@ $(document).ready(function () {
 
         // Render cards after product has been requested
         renderCards(products.products);
-        page++;
-        pageQuery = `?page=${page}`;
       },
+
       error: function (err) {
         $(`#end-message`).empty();
         $("#end-message").append(`
@@ -143,17 +153,22 @@ $(document).ready(function () {
     return $card;
   };
 
-  // Listen to window scrolling
-  $(window).on("scroll", function (event) {
-    // don't load products if not at bottom of page
-    if ($(window).scrollTop() > $(document).height() - $(window).height() - 2) {
-      loadProducts();
-    }
+  $(window).on("scroll", listenScroll);
+
+  $("#searchbar").on("input", function (event) {
+    page = 0;
+    pageQuery = `?page=${page}`;
+    titleQuery = `&title=${event.target.value}`;
+    $("#products").empty();
+    $(`#end-message`).empty();
+    loadProducts();
+    $(window).on("scroll", listenScroll);
   });
 
   // Filter form init
   $("#filter-form").submit(function (event) {
     event.preventDefault();
+    event.stopPropagaton();
     page = 0;
     pageQuery = `?page=${page}`;
     filterQuery = `&${$(this).serialize()}`;
