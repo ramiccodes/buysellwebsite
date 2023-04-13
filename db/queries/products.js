@@ -125,6 +125,18 @@ const addFavorite = (userId, itemId) => {
   );
 };
 
+// @desc Queries the database to check if the user already marked the product as favorite and returns true or false by using the user ID and item ID
+const checkFavorite = (userId, itemId) => {
+  return db.query(`
+  SELECT CASE WHEN EXISTS (
+    SELECT * FROM favorites WHERE user_id = $1 AND product_id = $2)
+    THEN 'True'
+    ELSE 'False' END
+    ;
+  `, [userId, itemId]);
+}
+
+// @desc Queries to remove one user's favorite product on the database by using the user ID and item ID
 const removeFavorite = (userId, itemId) => {
   return db.query(
     `DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`,
@@ -150,4 +162,5 @@ module.exports = {
   addFavorite,
   removeFavorite,
   filterByPrice,
+  checkFavorite
 };
