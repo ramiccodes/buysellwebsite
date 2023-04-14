@@ -54,13 +54,10 @@ app.use("/api/products", productsApiRoutes);
 app.use("/api/users", usersApiRoutes);
 app.use("/api/auth", authApiRoutes);
 app.use("/api/s3", s3ApiRoutes);
-app.use("/product", productRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", onboardingRoutes);
 app.use("/my-favorites", favoritesRoutes);
-// =======
-// app.use("/", productRoutes);
-// >>>>>>> c1aab37075842319eacc51cd482a5251844f898b
+app.use("/product", productRoutes);
 
 // Note: mount other resources here, using the same pattern above
 
@@ -68,9 +65,9 @@ app.use("/my-favorites", favoritesRoutes);
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-// app.get("/", (req, res) => {
-//   res.redirect("/product");
-// });
+app.get("/", (req, res) => {
+  res.redirect("/product");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

@@ -32,9 +32,10 @@ router.get("/listings", (req, res) => {
   getUserListings(userId)
     .then((listings) => {
       // res.render("listings") //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-      res.send(listings);
+      res.json({listings});
     })
     .catch((err) => {
+      console.log("error", err)
       res.status(500).json({ error: err.message });
     });
 })
@@ -56,14 +57,17 @@ router.get("/:id", (req, res) => {
 });
 
 // @desc Gets all of a user's favorite listings from the database
-// @route /api/users/:id/favorite
+// @route /api/users/favorite
 // @method GET
 
-router.get("/:id/favorite", (req, res) => {
+router.get("/favorite", (req, res) => {
+  console.log("Hello run please thanks very much")
+  console.log(req.session.user_id)
+  
   const userId = req.session["user_id"];
   getUserFavorites(userId)
     .then((favorites) => {
-      res.json({favorites}); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
+      res.send(favorites); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });
