@@ -4,29 +4,56 @@ const db = require("../connection");
 const getProducts = (options) => {
   // Hard page limit per load
   const PAGE_LIMIT = 20;
-  const { page, min, max, category } = options;
+  const { page, min, max, category, title } = options;
 
   // Variables relating to querying by option provided
   let variableIndex = 1;
+  let isFirstQuery = true;
   let params = [];
   let queryString = "SELECT * FROM products ";
+
+  // Filter by Price
+  if (title) {
+    params.push(`%${title}%`);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } title LIKE $${variableIndex}`;
+    variableIndex++;
+    isFirstQuery = false;
+  }
+
+  // Filter by Price
+  if (min && max) {
+    params.push(min);
+    params.push(max);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } price >= $${variableIndex} AND price <= $${variableIndex + 1} `;
+    variableIndex += 2;
+    isFirstQuery = false;
+  }
+
+  // Filter by Category
+  if (category) {
+    console.log("Category", category);
+    params.push(category);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } category = $${variableIndex} `;
+    variableIndex++;
+    isFirstQuery = false;
+  }
 
   // Limit per page
   if (page >= 0 || page) {
     params.push(page * 20);
-    queryString += `LIMIT ${PAGE_LIMIT} OFFSET $${variableIndex} `;
+    queryString += `LIMIT ${PAGE_LIMIT} OFFSET $${variableIndex}; `;
     variableIndex++;
-  }
-
-  // Filter by Price
-  if(min && max){
-    params.push(min)
-    params.push(max)
-    queryString += `WHERE price >= $${variableIndex} AND price <= $${variableIndex + 1}`
-    variableIndex += 2
+    isFirstQuery = false;
   }
 
   return db.query(queryString, params).then((data) => {
+    console.log("run")
     return data.rows;
   });
 };
@@ -125,6 +152,18 @@ const addFavorite = (userId, itemId) => {
   );
 };
 
+// @desc Queries the database to check if the user already marked the product as favorite and returns true or false by using the user ID and item ID
+const checkFavorite = (userId, itemId) => {
+  return db.query(`
+  SELECT CASE WHEN EXISTS (
+    SELECT * FROM favorites WHERE user_id = $1 AND product_id = $2)
+    THEN 'True'
+    ELSE 'False' END
+    ;
+  `, [userId, itemId]);
+}
+
+// @desc Queries to remove one user's favorite product on the database by using the user ID and item ID
 const removeFavorite = (userId, itemId) => {
   return db.query(
     `DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`,
@@ -150,4 +189,5 @@ module.exports = {
   addFavorite,
   removeFavorite,
   filterByPrice,
+  checkFavorite
 };

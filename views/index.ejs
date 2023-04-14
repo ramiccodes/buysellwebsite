@@ -26,6 +26,7 @@
               <i class="fa-solid fa-search"></i>
             </span>
             <input
+              id="searchbar"
               type="text"
               class="form-control"
               placeholder="Search for items"
@@ -58,7 +59,8 @@
 
           <!-- Filters by category -->
             <select name="category" id="category" class=" form-select" aria-label="Select Category">
-              <option selected value="furnitures">Furniture</option>
+              <option selected value="">All categories</option>
+              <option value="furnitures">Furniture</option>
               <option value="electronics">Electronics</option>
               <option value="toys">Toys</option>
             </select>
@@ -99,7 +101,7 @@
       <main>
         <div class="container">
           <div class="row">
-            <section class="cards"></section>
+            <section id="products" class="cards"></section>
             <div id="end-message"> </div>
           </div>
         </div>

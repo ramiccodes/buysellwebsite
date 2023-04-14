@@ -6,7 +6,6 @@
  */
 
 const express = require("express");
-const { getUserById } = require("../db/queries/users");
 const router = express.Router();
 
 // @route /auth/signup
