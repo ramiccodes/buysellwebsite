@@ -7,7 +7,7 @@
 
 const express = require("express");
 const productQueries = require("../db/queries/products");
-const { getUserById } = require("../db/queries/users");
+const { getUserById, getUserListings } = require("../db/queries/users");
 const router = express.Router();
 
 // @desc Returns all products from database
@@ -16,22 +16,63 @@ const router = express.Router();
 // @method GET
 
 router.get("/", (req, res) => {
-  let page = 0;
+  const { page, min, max, category, title } = req.query;
+
+  // Set default options
+  const options = {
+    page: 0,
+  };
 
   // If query string exists then set page to selected page
-  if (req.query.page) {
-    page = Number(req.query.page);
+  if (page >= 0 || page) {
+    options.page = Number(page);
+  }
+
+  // If query string exists then set page to selected page
+  if (min) {
+    options.min = min;
+  }
+
+  // If query string exists then set page to selected page
+  if (max) {
+    options.max = max;
+  }
+
+  // If query string exists then set page to selected page
+  if (title) {
+    options.title = title;
+  }
+
+  // If query string exists then set page to selected page
+  if (category) {
+    options.category = category;
   }
 
   productQueries
-    .getProductsByPage(page)
+    .getProducts(options)
     .then((products) => {
-      res.json({ products });
+      res.json(products);
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });
     });
 });
+
+// @desc Returns one product from database
+// @route /api/products/listings
+// @method GET
+
+router.get("/listings", (req, res) => {
+  const userId = req.session["user_id"];
+  getUserListings(userId)
+    .then((listings) => {
+      res.json(listings);
+    })
+    .catch((err) => {
+      console.log("error", err)
+      res.status(500).json({ error: err.message });
+    });
+})
 
 // @desc Returns one product from database
 // @route /api/products/:id
@@ -66,19 +107,22 @@ router.post("/", (req, res) => {
 
   // Error handling for creating post
   if (!title) {
-    res.render("/product/create", { error: "Please provide title" });
+    res.render("create", { isLoggedIn: userId, error: "Please provide title" });
   }
 
   if (!description) {
-    res.render("/product/create", { error: "Please provide description" });
+    res.render("create", {
+      isLoggedIn: userId,
+      error: "Please provide description",
+    });
   }
 
   if (!img) {
-    res.render("/product/create", { error: "Please provide image" });
+    res.render("create", { isLoggedIn: userId, error: "Please provide image" });
   }
 
   if (!price) {
-    res.render("/product/create", { error: "Please provide price" });
+    res.render("create", { isLoggedIn: userId, error: "Please provide price" });
   }
 
   // If id was found, then search for user
@@ -86,17 +130,9 @@ router.post("/", (req, res) => {
     .then((user) => {
       // If id could not be associated with another user
       if (!user) {
-        res.status(404).json({
-          success: false,
-          message: "Could not find user with id",
-        });
-      }
-
-      // Check if user is not admin
-      if (!user.is_admin) {
-        res.status(404).json({
-          success: false,
-          message: "Not admin",
+        res.render("login", {
+          isLoggedIn: false,
+          error: "Not authorized to view page",
         });
       }
 
@@ -110,14 +146,19 @@ router.post("/", (req, res) => {
         is_sold: false,
       };
     })
+
     .then((data) => {
       return productQueries.addProduct(data);
     })
-    .then((result) => {
+    .then(() => {
       res.redirect("/");
     })
-    .catch((err) => {
-      res.redirect("/product/create");
+
+    .catch(() => {
+      res.redirect("create", {
+        isLoggedIn: userId,
+        error: "Please provide price",
+      });
     });
 });
 
@@ -125,54 +166,65 @@ router.post("/", (req, res) => {
 // @route /api/products/:id/delete
 // @method POST
 
-router.post("/:id/delete", (req, res) => {
+router.delete("/:id/delete", (req, res) => {
   const productId = req.params.id;
   productQueries.deleteProduct(productId).then(() => {
-    res.status(200).send("Product deleted!");
+    res.status(200).json({ message: "Product deleted!" });
   });
 });
 
-// Need fixing
-router.post("/:id/edit"),
-  (req, res) => {
-    // const productDetails = req.body;
-    productQueries.editProduct(req.params.id).then((product) => {
-      res.redirect("/product");
-    });
-  };
+router.post("/:id/edit", (req, res) => {
+  const productDetails = req.body;
+  productQueries.editProduct(req.params.id, productDetails).then((product) => {
+    res.redirect("/product");
+  });
+});
 
 // @desc Marks a product as sold on the database
 // @route /api/products/:id/sold
 // @method POST
-router.post("/:id/sold", (req, res) => {
-  productQueries.markAsSold(req.params.id).then((product) => {
-    console.log("Marked as Sold");
-    res.redirect("/product");
-  });
+
+router.put("/:id/sold", (req, res) => {
+  const { id } = req.params;
+  const { is_sold } = req.body;
+
+  productQueries
+    .markAsSold(id, is_sold)
+    .then((product) => {
+      res.json({ success: true });
+    })
+    .catch((err) => {
+      res.status(500).json({ success: false, error: err });
+    });
 });
 
-// @desc Marks a product as a user's favorite on the database
+// @desc
+// Checks if the user already has the product marked as a favorite on the database and returns true or false
+// If FALSE: Adds a product as a user's favorite on the database
+// If TRUE: Removes a product as a user's favorite on the database
 // @route /api/products/:id/favorite
 // @method POST
-router.post("/:id/favorite", (req, res) => {
-  const userId = req.session["userId"];
-  const itemId = req.params.id;
-  productQueries.addFavorite(userId, itemId).then((product) => {
-    console.log("Marked as Favorite");
-    res.redirect("/product");
-  });
-});
 
-// @desc Removes a product as a user's favorite on the database
-// @route /api/products/:id/favorite/delete
-// @method POST
-router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session["userId"];
+router.post("/:id/favorite", (req, res) => {
+
+  const userId = req.session["user_id"];
   const itemId = req.params.id;
-  productQueries.removeFavorite(userId, itemId).then((product) => {
-    console.log("Removed as Favorite");
-    res.redirect("/product");
-  });
-});
+
+  productQueries.checkFavorite(userId, itemId)
+  .then(favorite => {
+    if (favorite.rows[0].case === 'False') {
+      productQueries.addFavorite(userId, itemId).then((product) => {
+        console.log("Added to Favorites");
+        res.redirect("/product");
+      });
+    }
+    if (favorite.rows[0].case === 'True') {
+      productQueries.removeFavorite(userId, itemId).then((product) => {
+        console.log("Removed from Favorites");
+        res.redirect("/product");
+      });
+    }
+  })
+})
 
 module.exports = router;

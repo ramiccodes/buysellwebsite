@@ -38,9 +38,35 @@ const addUser = (username, email, password) => {
     });
 };
 
-
 const getUserFavorites = (id) => {
-  return db.query(`SELECT product_id FROM favorites WHERE user_id = $1`, [id])
-}
+  return db
+    .query(`SELECT * FROM favorites JOIN products ON (products.id = favorites.product_id) WHERE favorites.user_id = $1`, [id])
+    .then((favorites) => {
+      return favorites.rows;
+    })
+    .catch((err) => {
+      console.log("error", err);
+      return err;
+    });
+};
 
-module.exports = { getUsers, getUserByEmail, addUser, getUserById, getUserFavorites };
+const getUserListings = (id) => {
+  return db
+    .query(`SELECT * FROM products WHERE user_id = $1`, [id])
+    .then((listings) => {
+      return listings.rows;
+    })
+    .catch((err) => {
+      console.log("error", err);
+      return err;
+    });
+};
+
+module.exports = {
+  getUsers,
+  getUserByEmail,
+  addUser,
+  getUserById,
+  getUserFavorites,
+  getUserListings,
+};

@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
     <link rel="stylesheet" href="/styles/product.css" type="text/css" />
     <script defer src="/scripts/product.js"></script>
     <title>Product Page</title>
     <%- include('partials/_meta') %>
-
   </head>
   <body>
     <%- include('partials/_header') %>
     <div class="container mt-5">
       <div class="row justify-content-center">
-      <h1 class="mb-4"><%= title %></h1>
         <div class="col-md-6">
           <div class="image-container">
             <div class="square-image">
-              <img src="<%= img %>" alt="Product Image" class="img-fluid rounded">
+              <img
+                src="<%= img %>"
+                alt="Product Image"
+                class="img-fluid rounded"
+              />
             </div>
-            <form action="/api/products/<%= id %>/favorite" method="POST">
+            <form
+              action="/api/products/<%= product_id %>/favorite"
+              method="POST"
+            >
               <button class="favorite-btn" type="submit">
                 <i class="fas fa-heart fa-2x"></i>
               </button>
             </form>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="d-flex align-items-center">
-            <div>
-              <h3>
-               Description
-              </h3>
-              <p><%= description %></p>
-            </div>
-            <div class="ms-auto">
-              <h3>Price:</h3>
-              <p><%= price %></p>
-            </div>
+        <div class="d-flex flex-column col-md-6 justify-content-center">
+          <div class="d-flex flex-column mt-4">
+            <h1><%= title %></h1>
+            <h3>$<%= price %></h3>
+            <p><%= description %></p>
           </div>
           <div id="message">
 
@@ -48,7 +45,6 @@
           </form>
         </div>
       </div>
-    </div>
     </div>
   </body>
 </html>

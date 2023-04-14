@@ -8,11 +8,16 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/create", (req, res) => {
-  res.render("create", isLoggedIn);
+router.get("/my-favorites", (req, res) => {
+  const isLoggedIn = req.session.user_id;
+
+  // If logged in, don't let user go to signup page
+  if (!isLoggedIn) {
+    res.redirect("/auth/login");
+  }
+
+  const templateVars = { isLoggedIn };
+  res.render("favorites", templateVars);
 });
-
-
-
 
 module.exports = router;

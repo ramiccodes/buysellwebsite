@@ -1,21 +1,69 @@
 const db = require("../connection");
 
 // @desc Queries arrays of product objects
-const getProducts = () => {
-  return db.query("SELECT * FROM products;").then((data) => {
+const getProducts = (options) => {
+  // Hard page limit per load
+  const PAGE_LIMIT = 20;
+  const { page, min, max, category, title, user_id } = options;
+
+  // Variables relating to querying by option provided
+  let variableIndex = 1;
+  let isFirstQuery = true;
+  let params = [];
+  let queryString = "SELECT * FROM products ";
+
+  // Filter by Price
+  if (title) {
+    params.push(`%${title}%`);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } title LIKE $${variableIndex}`;
+    variableIndex++;
+    isFirstQuery = false;
+  }
+
+  // Filter by Price
+  if (min && max) {
+    params.push(min);
+    params.push(max);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } price >= $${variableIndex} AND price <= $${variableIndex + 1} `;
+    variableIndex += 2;
+    isFirstQuery = false;
+  }
+
+  // Filter by Price
+  if (user_id) {
+    params.push(max);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } user_id = $${variableIndex} `;
+    variableIndex++
+    isFirstQuery = false;
+  }
+
+  // Filter by Category
+  if (category) {
+    params.push(category);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } category = $${variableIndex} `;
+    variableIndex++;
+    isFirstQuery = false;
+  }
+
+  // Limit per page
+  if (page >= 0 || page) {
+    params.push(page * 20);
+    queryString += `LIMIT ${PAGE_LIMIT} OFFSET $${variableIndex}; `;
+    variableIndex++;
+    isFirstQuery = false;
+  }
+
+  return db.query(queryString, params).then((data) => {
     return data.rows;
   });
-};
-
-// @desc Queries arrays of product objects
-const getProductsByPage = (page) => {
-
-  // Magic Number 20: Limit of products shown each page
-  return db
-    .query("SELECT * FROM products LIMIT 20 OFFSET $1;", [page * 20])
-    .then((data) => {
-      return data.rows;
-    });
 };
 
 // @desc Queries one product object by Id
@@ -31,7 +79,7 @@ const getProductById = (id) => {
 const getProductWithUserById = (id) => {
   return db
     .query(
-      "SELECT * FROM products JOIN users ON (users.id=products.user_id) WHERE products.id = $1",
+      "SELECT products.id as product_id, * FROM products JOIN users ON (users.id=products.user_id) WHERE products.id = $1",
       [id]
     )
     .then((data) => {
@@ -77,48 +125,69 @@ const deleteProduct = (id) => {
       console.log(err.message);
       return null;
     });
-}
+};
 
-
-const editProduct = (id) => {
-  const { title, price, img, description, category, is_sold } = req.body;
-  return db
-    .query(`
+const editProduct = (id, details) => {
+  return db.query(
+    `
     UPDATE products SET title = $1, price = $2, img = $3, description = $4, category = $5, is_sold = $6 WHERE id = $7;
     `,
-        [
-          title,
-          price,
-          img,
-          description,
-          category,
-          is_sold,
-          id
-        ]
-      )
+    [
+      details.title,
+      details.price,
+      details.img,
+      details.description,
+      details.category,
+      details.is_sold,
+      id,
+    ]
+  );
 };
 
 // @desc Queries to mark one product as sold on the database by ID
-const markAsSold = (id) => {
-  return db.query(`UPDATE products SET is_sold = true WHERE id = $1;`, [id])
-}
+const markAsSold = (id, isSold) => {
+  return db.query(`UPDATE products SET is_sold = $1 WHERE id = $2`, [
+    isSold,
+    id,
+  ]);
+};
 
 // @desc Queries to favorite one product on the database by the user ID and item ID
 const addFavorite = (userId, itemId) => {
-  return db.query(`INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *;`, [userId, itemId]);
+  return db.query(
+    `INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *;`,
+    [userId, itemId]
+  );
+};
+
+// @desc Queries the database to check if the user already marked the product as favorite and returns true or false by using the user ID and item ID
+const checkFavorite = (userId, itemId) => {
+  return db.query(`
+  SELECT CASE WHEN EXISTS (
+    SELECT * FROM favorites WHERE user_id = $1 AND product_id = $2)
+    THEN 'True'
+    ELSE 'False' END
+    ;
+  `, [userId, itemId]);
 }
 
+// @desc Queries to remove one user's favorite product on the database by using the user ID and item ID
 const removeFavorite = (userId, itemId) => {
-  return db.query(`DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`, [userId, itemId]);
-}
+  return db.query(
+    `DELETE FROM favorites WHERE user_id = $1 AND product_id = $2;`,
+    [userId, itemId]
+  );
+};
 
 const filterByPrice = (min, max) => {
-  return db.query(`SELECT * FROM products WHERE price <= $2 AND price >= $1;`, [min, max]);
-}
+  return db.query(`SELECT * FROM products WHERE price <= $2 AND price >= $1;`, [
+    min,
+    max,
+  ]);
+};
 
 module.exports = {
   getProducts,
-  getProductsByPage,
   getProductWithUserById,
   getProductById,
   addProduct,
@@ -127,5 +196,6 @@ module.exports = {
   markAsSold,
   addFavorite,
   removeFavorite,
-  filterByPrice
+  filterByPrice,
+  checkFavorite
 };
