@@ -194,13 +194,13 @@ const createCardElement = function (product) {
 
   $card.find(".favorite-btn").on("click", function () {
     const productId = product.id;
-
+    $(this).toggleClass("red-button");
     $.ajax({
       url: `/api/products/${productId}/favorite`,
       method: "POST",
       dataType: "json",
       success: function (response) {
-        console.log("added to favs");
+        console.log("added to favs")
       },
       error: function () {
         renderWarning("Error adding");
