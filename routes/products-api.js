@@ -193,27 +193,6 @@ router.put("/:id/sold", (req, res) => {
 router.post("/:id/favorite", (req, res) => {
   const userId = req.session["user_id"];
   const itemId = req.params.id;
-<<<<<<< HEAD
-  productQueries.addFavorite(userId, itemId).then((product) => {
-    console.log("Marked as Favorite");
-    
-  });
-});
-
-// @desc Removes a product as a user's favorite on the database
-// @route /api/products/:id/favorite/delete
-// @method POST
-// This one needs to be fixed
-
-router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session["user_id"];
-  const itemId = req.params.id;
-  productQueries.removeFavorite(userId, itemId).then((product) => {
-    console.log("Removed as Favorite");
-    res.redirect("/product");
-  });
-});
-=======
   productQueries.checkFavorite(userId, itemId)
   .then(favorite => {
     if (favorite.rows[0].case === 'False') {
@@ -230,6 +209,5 @@ router.post("/:id/favorite/delete", (req, res) => {
     }
   })
 })
->>>>>>> 03d5c8030166c43a7b2b6c214e066abbe537b870
 
 module.exports = router;

@@ -56,7 +56,7 @@ app.use("/api/s3", s3ApiRoutes);
 app.use("/product", productRoutes);
 app.use("/", productRoutes);
 app.use("/auth", onboardingRoutes);
-app.use("/favorites", favoritesRoutes);
+app.use("/my-favorites", favoritesRoutes);
 
 // Note: mount other resources here, using the same pattern above
 

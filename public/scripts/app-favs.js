@@ -50,7 +50,7 @@ $(document).ready(function () {
   };
 
   const createCardElement = function (product) {
-    if (product.favorite === true) {
+    
     let $card = $(`
     <div class="col-md-6 col-sm-12 col-lg-4">
       <div class="card-wrapper">
@@ -141,7 +141,7 @@ $(document).ready(function () {
       $card.remove();
     });
     
-    };
+    
 
     return $card;
   };
