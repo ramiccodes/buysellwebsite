@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
+
+    <!-- App JS -->
+    <script defer src="/scripts/middleware/_utils.js"></script>
+    <script defer src="/scripts/middleware/_products.js"></script>
+    <script defer src="/scripts/user-listing.js"></script>
+
+    <title>My listing</title>
+    <%- include('partials/_meta') %>
+  </head>
+
+  <body>
+    <%- include('partials/_header') %>
+    <div class="d-flex flex-column gap-2 p-2">
+      <!-- Render product cards (sample placeholder) -->
+
+      <main>
+        <div class="container">
+          <header class="my-2">
+            <h1 class="h3">My listing</h1>
+            <hr class="mb-3" />
+          </header>
+          <div class="row">
+            <section id="products" class="cards"></section>
+            <div id="end-message"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

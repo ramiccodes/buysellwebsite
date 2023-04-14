@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
 
     <!-- App JS -->
+    <script defer src="/scripts/middleware/_utils.js"></script>
+    <script defer src="/scripts/middleware/_products.js"></script>
     <script defer src="/scripts/app.js"></script>
 
     <title>Home Page</title>
@@ -20,7 +22,7 @@
       <div class="w-100 d-flex align-items-center gap-3 pb-2">
 
         <!-- Searchbar form -->
-        <form class="form-floating w-100">
+        <form id="search-form" class="form-floating w-100">
           <div class="input-group">
             <span class="input-group-text">
               <i class="fa-solid fa-search"></i>
