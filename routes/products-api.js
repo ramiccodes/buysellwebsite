@@ -206,7 +206,10 @@ router.put("/:id/sold", (req, res) => {
     });
 });
 
-// @desc Marks a product as a user's favorite on the database
+// @desc
+// Checks if the user already has the product marked as a favorite on the database and returns true or false
+// If FALSE: Adds a product as a user's favorite on the database
+// If TRUE: Removes a product as a user's favorite on the database
 // @route /api/products/:id/favorite
 // @method POST
 
@@ -214,24 +217,21 @@ router.post("/:id/favorite", (req, res) => {
   const userId = req.session["user_id"];
   const itemId = req.params.id;
 
-  productQueries.addFavorite(userId, itemId).then((product) => {
-    console.log("Marked as Favorite");
-    res.redirect("/product");
-  });
-});
-
-// @desc Removes a product as a user's favorite on the database
-// @route /api/products/:id/favorite/delete
-// @method POST
-// This one needs to be fixed
-
-router.post("/:id/favorite/delete", (req, res) => {
-  const userId = req.session["user_id"];
-  const itemId = req.params.id;
-  productQueries.removeFavorite(userId, itemId).then((product) => {
-    console.log("Removed as Favorite");
-    res.redirect("/product");
-  });
-});
+  productQueries.checkFavorite(userId, itemId)
+  .then(favorite => {
+    if (favorite.rows[0].case === 'False') {
+      productQueries.addFavorite(userId, itemId).then((product) => {
+        console.log("Added to Favorites");
+        res.redirect("/product");
+      });
+    }
+    if (favorite.rows[0].case === 'True') {
+      productQueries.removeFavorite(userId, itemId).then((product) => {
+        console.log("Removed from Favorites");
+        res.redirect("/product");
+      });
+    }
+  })
+})
 
 module.exports = router;
