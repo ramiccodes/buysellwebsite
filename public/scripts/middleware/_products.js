@@ -44,10 +44,12 @@ const remountComponents = (endpoint) => {
 
 // Listen to page scroll;
 const listenScroll = (endpoint) => {
+
   if ($(window).scrollTop() > $(document).height() - $(window).height() - 1) {
     query.nextPage();
     loadProducts(endpoint);
   }
+
 };
 
 // Render out warning message on screen
@@ -66,7 +68,7 @@ const renderWarning = (message) => {
 // Load products onto the page
 const loadProducts = (endpoint) => {
   $.ajax({
-    url: endpoint + query.concatenate(),
+    url: endpoint ,
     method: "GET",
     dataType: "json",
     success: function (products) {
@@ -111,7 +113,7 @@ const createCardElement = function (product) {
             <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
           </div>
           </a>
-          <button class="favorite-btn">
+          <button class="favorite-btn" data-id="${product.id}">
             <i class="fas fa-heart"></i>
           </button>
           ${
@@ -180,6 +182,22 @@ const createCardElement = function (product) {
       },
       error: function () {
         renderWarning("Error deleting product");
+      },
+    });
+  });
+
+  $card.find(".favorite-btn").on("click", function () {
+    const productId = product.id;
+
+    $.ajax({
+      url: `/api/products/${productId}/favorite`,
+      method: "POST",
+      dataType: "json",
+      success: function (response) {
+        console.log("added to favs")
+      },
+      error: function () {
+        renderWarning("Error adding");
       },
     });
   });

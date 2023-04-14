@@ -23,16 +23,17 @@ router.get("/", (req, res) => {
     });
 });
 
-// @desc Gets all of the user's listings from database
-// @route /api/users/listings
+// @desc Gets all of a user's favorite listings from the database
+// @route /api/users/favorite
 // @method GET
 
-router.get("/listings", (req, res) => {
+router.get("/favorite", (req, res) => {
+  console.log(req.session.user_id)
+
   const userId = req.session["user_id"];
-  getUserListings(userId)
-    .then((listings) => {
-      // res.render("listings") //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-      res.send(listings);
+  getUserFavorites(userId)
+    .then((favorites) => {
+      res.send(favorites); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });
@@ -55,19 +56,6 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// @desc Gets all of a user's favorite listings from the database
-// @route /api/users/:id/favorite
-// @method GET
 
-router.get("/:id/favorite", (req, res) => {
-  const userId = req.session["user_id"];
-  getUserFavorites(userId)
-    .then((favorites) => {
-      res.json({favorites}); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
-})
 
 module.exports = router;

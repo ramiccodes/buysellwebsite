@@ -45,6 +45,7 @@ const usersApiRoutes = require("./routes/users-api");
 const productRoutes = require("./routes/product");
 const userRoutes = require("./routes/users");
 const onboardingRoutes = require("./routes/onboarding");
+const favoritesRoutes = require("./routes/favorites");
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
@@ -53,10 +54,10 @@ app.use("/api/products", productsApiRoutes);
 app.use("/api/users", usersApiRoutes);
 app.use("/api/auth", authApiRoutes);
 app.use("/api/s3", s3ApiRoutes);
-app.use("/product", productRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", onboardingRoutes);
-app.use("/", productRoutes);
+app.use("/my-favorites", favoritesRoutes);
+app.use("/product", productRoutes);
 
 // Note: mount other resources here, using the same pattern above
 
@@ -64,9 +65,9 @@ app.use("/", productRoutes);
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-// app.get("/", (req, res) => {
-//   res.redirect("/product");
-// });
+app.get("/", (req, res) => {
+  res.redirect("/product");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
