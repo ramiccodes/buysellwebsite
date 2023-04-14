@@ -45,7 +45,6 @@ const getProducts = (options) => {
 
   // Filter by Category
   if (category) {
-    console.log("Category", category);
     params.push(category);
     queryString += `${
       isFirstQuery ? "WHERE" : "AND"
@@ -63,7 +62,6 @@ const getProducts = (options) => {
   }
 
   return db.query(queryString, params).then((data) => {
-    console.log("run");
     return data.rows;
   });
 };

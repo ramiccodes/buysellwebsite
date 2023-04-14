@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     // After setting new queries, load new products
     remountComponents("/api/products");
-    $(window).on("scroll", ()=> listenScroll("/api/products"));
+    $(window).on("scroll", () => listenScroll("/api/products"));
   });
 
   // Filter form init
@@ -18,6 +18,12 @@ $(document).ready(function () {
 
     // After seting up new queries, load new products
     remountComponents("/api/products");
+  });
+
+  // Prevent search form from being submitted
+  $("#search-form").submit(function (event) {
+    event.preventDefault();
+    event.stopPropagation();
   });
 
   // Check if logged in user is admin
