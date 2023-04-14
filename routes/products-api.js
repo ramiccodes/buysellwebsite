@@ -215,7 +215,6 @@ router.post("/:id/favorite", (req, res) => {
   const itemId = req.params.id;
 
   productQueries.addFavorite(userId, itemId).then((product) => {
-    console.log("Marked as Favorite");
     res.redirect("/product");
   });
 });
@@ -229,7 +228,6 @@ router.post("/:id/favorite/delete", (req, res) => {
   const userId = req.session["user_id"];
   const itemId = req.params.id;
   productQueries.removeFavorite(userId, itemId).then((product) => {
-    console.log("Removed as Favorite");
     res.redirect("/product");
   });
 });
