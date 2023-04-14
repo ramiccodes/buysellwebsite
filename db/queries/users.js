@@ -40,7 +40,7 @@ const addUser = (username, email, password) => {
 
 const getUserFavorites = (id) => {
   return db
-    .query(`SELECT * FROM favorites JOIN products ON (products.id = favorites.product_id) WHERE products.user_id = $1`, [id])
+    .query(`SELECT * FROM favorites JOIN products ON (products.id = favorites.product_id) WHERE favorites.user_id = $1`, [id])
     .then((favorites) => {
       return favorites.rows;
     })
