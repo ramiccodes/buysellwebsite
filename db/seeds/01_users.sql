@@ -4,7 +4,7 @@
 INSERT INTO users (username, email, password, is_admin)
 VALUES ('alice_wonder', 'aWonder@gmail.com', 'password', false),
 ('ashKetchup', 'ashKetch@gmail.com', 'password', false),
-('bruceWayne', 'amBatman@gmail.com', 'admin', true),
+('bruceWayne', 'takuyawebdev@gmail.com', 'admin', true),
 ('spydi_senZ', 'peterparker@gmail.com', 'admin', true);
 
 -- PRODUCTS --

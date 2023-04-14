@@ -12,6 +12,7 @@
   "author": "Lighthouse Labs",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "aws-sdk": "^2.1356.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.0-alpha3",

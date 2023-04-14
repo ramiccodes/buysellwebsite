@@ -39,6 +39,7 @@ app.use(
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 const authApiRoutes = require("./routes/auth-api");
+const contactApiRoutes = require("./routes/contact-api");
 const s3ApiRoutes = require("./routes/s3-api");
 const productsApiRoutes = require("./routes/products-api");
 const usersApiRoutes = require("./routes/users-api");
@@ -54,7 +55,10 @@ app.use("/api/products", productsApiRoutes);
 app.use("/api/users", usersApiRoutes);
 app.use("/api/auth", authApiRoutes);
 app.use("/api/s3", s3ApiRoutes);
+app.use("/api/contact", contactApiRoutes);
+app.use("/product", productRoutes);
 app.use("/user", userRoutes);
+
 app.use("/auth", onboardingRoutes);
 app.use("/my-favorites", favoritesRoutes);
 app.use("/product", productRoutes);
