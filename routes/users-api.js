@@ -40,6 +40,23 @@ router.get("/listings", (req, res) => {
     });
 })
 
+// @desc Gets all of a user's favorite listings from the database
+// @route /api/users/favorite
+// @method GET
+
+router.get("/favorite", (req, res) => {
+  console.log(req.session.user_id)
+
+  const userId = req.session["user_id"];
+  getUserFavorites(userId)
+    .then((favorites) => {
+      res.send(favorites); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+})
+
 // @desc Gets one user from database
 // @route /api/users/:id
 // @method GET
@@ -56,22 +73,6 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// @desc Gets all of a user's favorite listings from the database
-// @route /api/users/favorite
-// @method GET
 
-router.get("/favorite", (req, res) => {
-  console.log("Hello run please thanks very much")
-  console.log(req.session.user_id)
-  
-  const userId = req.session["user_id"];
-  getUserFavorites(userId)
-    .then((favorites) => {
-      res.send(favorites); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
-})
 
 module.exports = router;

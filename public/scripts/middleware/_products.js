@@ -44,12 +44,12 @@ const remountComponents = (endpoint) => {
 
 // Listen to page scroll;
 const listenScroll = (endpoint) => {
-  
+
   if ($(window).scrollTop() > $(document).height() - $(window).height() - 1) {
     query.nextPage();
     loadProducts(endpoint);
   }
-  
+
 };
 
 // Render out warning message on screen
@@ -68,12 +68,13 @@ const renderWarning = (message) => {
 // Load products onto the page
 const loadProducts = (endpoint) => {
   $.ajax({
-    url: endpoint + query.concatenate(),
+    url: endpoint ,
     method: "GET",
     dataType: "json",
     success: function (products) {
       // If there are no more products, remove event listener for the window
       if (products.length < 20) {
+
         renderWarning("No more products to load");
 
         // Remove event listener when no more products
@@ -194,16 +195,13 @@ const createCardElement = function (product) {
       method: "POST",
       dataType: "json",
       success: function (response) {
-        console.log("added to favs") 
+        console.log("added to favs")
       },
       error: function () {
         renderWarning("Error adding");
       },
     });
   });
-
-
-
 
   return $card;
 };

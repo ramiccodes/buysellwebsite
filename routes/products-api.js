@@ -181,7 +181,6 @@ router.delete("/:id/delete", (req, res) => {
 });
 
 router.post("/:id/edit", (req, res) => {
-  const { title, price, img, description, category, is_sold } = req.body;
   const productDetails = req.body;
   productQueries.editProduct(req.params.id, productDetails).then((product) => {
     res.redirect("/product");
@@ -214,6 +213,7 @@ router.put("/:id/sold", (req, res) => {
 // @method POST
 
 router.post("/:id/favorite", (req, res) => {
+
   const userId = req.session["user_id"];
   const itemId = req.params.id;
 
