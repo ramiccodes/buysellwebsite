@@ -151,7 +151,7 @@ router.post("/", (req, res) => {
       return productQueries.addProduct(data);
     })
     .then(() => {
-      res.redirect("/");
+      res.redirect("/user/listing");
     })
 
     .catch(() => {
@@ -206,7 +206,6 @@ router.put("/:id/sold", (req, res) => {
 // @method POST
 
 router.post("/:id/favorite", (req, res) => {
-
   const userId = req.session["user_id"];
   const itemId = req.params.id;
 
@@ -214,13 +213,11 @@ router.post("/:id/favorite", (req, res) => {
   .then(favorite => {
     if (favorite.rows[0].case === 'False') {
       productQueries.addFavorite(userId, itemId).then((product) => {
-        console.log("Added to Favorites");
         res.redirect("/product");
       });
     }
     if (favorite.rows[0].case === 'True') {
       productQueries.removeFavorite(userId, itemId).then((product) => {
-        console.log("Removed from Favorites");
         res.redirect("/product");
       });
     }

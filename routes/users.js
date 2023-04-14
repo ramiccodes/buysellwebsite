@@ -9,8 +9,29 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/listing", (req, res) => {
+  const isLoggedIn = req.session.user_id;
+
+  // If logged in, don't let user go to signup page
+  if (!isLoggedIn) {
+    res.redirect("/auth/login", {error: "Please login first to view your listing"});
+  }
+
   const templateVars = { isLoggedIn: req.session.user_id };
   res.render("user-listing", templateVars);
 });
+
+
+router.get("/favorites", (req, res) => {
+  const isLoggedIn = req.session.user_id;
+
+  // If logged in, don't let user go to signup page
+  if (!isLoggedIn) {
+    res.redirect("/auth/login", {error: "Please login first to view your favorites"});
+  }
+
+  const templateVars = { isLoggedIn };
+  res.render("favorites", templateVars);
+});
+
 
 module.exports = router;

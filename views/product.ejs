@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="/styles/product.css" type="text/css" />
+    <script defer src="/scripts/middleware/_utils.js"></script>
+    <script defer src="/scripts/middleware/_products.js"></script>
     <script defer src="/scripts/product.js"></script>
     <title>Product Page</title>
     <%- include('partials/_meta') %>
@@ -19,11 +21,7 @@
                 class="img-fluid rounded"
               />
             </div>
-            <form
-              action="/api/products/<%= product_id %>/favorite"
-              method="POST"
-            >
-              <button class="favorite-btn" type="submit">
+              <button id="favorite-btn" class="favorite-btn" type="submit">
                 <i class="fas fa-heart fa-2x"></i>
               </button>
             </form>
@@ -35,13 +33,27 @@
             <h3>$<%= price %></h3>
             <p><%= description %></p>
           </div>
-          <div id="message">
-
-          </div>
-          <form class="d-flex flex-column gap-2" data-subject="Looking for <%= title%>" data-email="<%= email %>"id="email-form">
-              <input type="email" name="from" class="form-control" placeholder="Your email here">
-              <textarea name="text" placeholder="Message to seller" class="form-control"></textarea>
-              <button type="submit" class="btn btn-primary mt-3">Send Email</button>
+          <div class="my-2" id="message"></div>
+          <form
+            class="d-flex flex-column gap-2"
+            data-subject="Looking for <%= title%>"
+            data-email="<%= email %>"
+            id="email-form"
+          >
+            <input
+              type="email"
+              name="from"
+              class="form-control"
+              placeholder="Your email here"
+            />
+            <textarea
+              name="text"
+              placeholder="Message to seller"
+              class="form-control"
+            ></textarea>
+            <button type="submit" class="btn btn-primary mt-3">
+              Send Email
+            </button>
           </form>
         </div>
       </div>

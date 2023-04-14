@@ -1,5 +1,23 @@
 $(document).ready(function () {
-  console.log("running");
+  $("#favorite-btn").on("click", function (event) {
+    const productId = $(this).attr("data-id");
+    $.ajax({
+      url: `/api/products/${productId}/favorite`,
+      method: "POST",
+      dataType: "json",
+      success: function (response) {
+        if(response.res)
+        $(this).toggleClass("red-button");
+        else if(response.res)
+        $(this).toggleClass("red-button");
+
+      },
+      error: function () {
+        renderWarning("Error adding");
+      },
+    });
+  });
+
   $("#email-form").submit(function (event) {
     event.preventDefault();
 
