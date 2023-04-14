@@ -23,23 +23,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// @desc Gets all of the user's listings from database
-// @route /api/users/listings
-// @method GET
-
-router.get("/listings", (req, res) => {
-  const userId = req.session["user_id"];
-  getUserListings(userId)
-    .then((listings) => {
-      // res.render("listings") //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-      res.json({listings});
-    })
-    .catch((err) => {
-      console.log("error", err)
-      res.status(500).json({ error: err.message });
-    });
-})
-
 // @desc Gets all of a user's favorite listings from the database
 // @route /api/users/favorite
 // @method GET

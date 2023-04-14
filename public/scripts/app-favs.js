@@ -3,7 +3,3 @@ $(document).ready(() => {
   $(window).on("scroll", () => listenScroll("/api/users/favorite"));
   loadProducts("/api/users/favorite");
 });
-
-
-// GET all users favorites
-// /api/users/favorite

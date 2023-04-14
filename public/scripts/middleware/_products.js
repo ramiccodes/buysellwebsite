@@ -74,7 +74,6 @@ const loadProducts = (endpoint) => {
     success: function (products) {
       // If there are no more products, remove event listener for the window
       if (products.length < 20) {
-
         renderWarning("No more products to load");
 
         // Remove event listener when no more products

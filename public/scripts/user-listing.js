@@ -1,5 +1,5 @@
 $(document).ready(() => {
   // Mount listener for scrolling
-  $(window).on("scroll", () => listenScroll("/api/users/listings"));
-  loadProducts("/api/users/listings");
+  $(window).on("scroll", () => listenScroll("/api/products/listings"));
+  loadProducts("/api/products/listings");
 });

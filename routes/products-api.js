@@ -7,7 +7,7 @@
 
 const express = require("express");
 const productQueries = require("../db/queries/products");
-const { getUserById } = require("../db/queries/users");
+const { getUserById, getUserListings } = require("../db/queries/users");
 const router = express.Router();
 
 // @desc Returns all products from database
@@ -58,29 +58,21 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/listing", (req, res) => {
-  const { page } = req.query;
+// @desc Returns one product from database
+// @route /api/products/listings
+// @method GET
 
-  // Set default options
-  const options = {
-    page: 0,
-    user_id: req.session.user_id,
-  };
-
-  // If query string exists then set page to selected page
-  if (page >= 0 || page) {
-    options.page = Number(page);
-  }
-
-  productQueries
-    .getProducts(options)
-    .then((products) => {
-      res.json({ products });
+router.get("/listings", (req, res) => {
+  const userId = req.session["user_id"];
+  getUserListings(userId)
+    .then((listings) => {
+      res.json(listings);
     })
     .catch((err) => {
+      console.log("error", err)
       res.status(500).json({ error: err.message });
     });
-});
+})
 
 // @desc Returns one product from database
 // @route /api/products/:id
@@ -161,6 +153,7 @@ router.post("/", (req, res) => {
     .then(() => {
       res.redirect("/");
     })
+
     .catch(() => {
       res.redirect("create", {
         isLoggedIn: userId,
