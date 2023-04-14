@@ -1,6 +1,7 @@
 // Query object and setters for managing query state
 const query = {
   isAdmin: false,
+  isLoggedIn: false,
   currentPage: 0,
   page: "?page=0",
   filters: "",
@@ -44,12 +45,10 @@ const remountComponents = (endpoint) => {
 
 // Listen to page scroll;
 const listenScroll = (endpoint) => {
-
   if ($(window).scrollTop() > $(document).height() - $(window).height() - 1) {
     query.nextPage();
     loadProducts(endpoint);
   }
-
 };
 
 // Render out warning message on screen
@@ -68,7 +67,7 @@ const renderWarning = (message) => {
 // Load products onto the page
 const loadProducts = (endpoint) => {
   $.ajax({
-    url: endpoint ,
+    url: endpoint + query.concatenate(),
     method: "GET",
     dataType: "json",
     success: function (products) {
@@ -113,9 +112,13 @@ const createCardElement = function (product) {
             <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
           </div>
           </a>
-          <button class="favorite-btn" data-id="${product.id}">
-            <i class="fas fa-heart"></i>
-          </button>
+          ${
+            query.isLoggedIn ? `
+            <button class="favorite-btn" data-id="${product.id}">
+              <i class="fas fa-heart"></i>
+            </button>
+            ` : ""
+          }
           ${
             query.isAdmin
               ? `
@@ -157,9 +160,12 @@ const createCardElement = function (product) {
 
         // Toggle the "SOLD" overlay text visibility
         if (isSold) {
-          return $card.find(".overlay-text").text("SOLD");
+          $card.find(".overlay-text").text("SOLD");
+          $card.find(".img-fluid").addClass("sold");
+        } else {
+          $card.find(".overlay-text").text("");
+          $card.find(".img-fluid").removeClass("sold");
         }
-        $card.find(".overlay-text").text("");
       },
       error: function () {
         renderWarning("Error setting to sold");
@@ -194,7 +200,6 @@ const createCardElement = function (product) {
       method: "POST",
       dataType: "json",
       success: function (response) {
-
         console.log("added to favs")
       },
       error: function () {

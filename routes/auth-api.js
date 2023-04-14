@@ -87,7 +87,10 @@ router.post("/signup", (req, res) => {
     .then((user) => {
       // If no user is returned
       if (user) {
-        res.render("signup", { isLoggedIn: false, error: "User already exists" });
+        res.render("signup", {
+          isLoggedIn: false,
+          error: "User already exists",
+        });
       }
 
       // Encrypt password before pushing out
@@ -125,24 +128,26 @@ router.post("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-// @route /auth/admin
-// @desc Check if user is admin
+// @route /auth/status
+// @desc Check if user is logged in or admin
 // @method GET
 
-router.get("/admin", (req, res) => {
+router.get("/status", (req, res) => {
   const userId = req.session.user_id;
 
   // If user is not logged in, just return false
-  if (!userId){
-    res.send({ isAdmin: false });
+  if (!userId) {
+    res.send({ isAdmin: false, isLoggedIn: false });
   }
 
   // Check user information
-  getUserById(userId).then((user) => {
-    res.send({ isAdmin: user.is_admin });
-  }).catch(()=>{
-    res.send({ isAdmin: false });
-  })
+  getUserById(userId)
+    .then((user) => {
+      res.send({ isAdmin: user.is_admin, isLoggedIn: true });
+    })
+    .catch(() => {
+      res.send({ isAdmin: false, isLoggedIn: true });
+    });
 });
 
 module.exports = router;
