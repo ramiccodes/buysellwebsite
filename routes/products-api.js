@@ -17,7 +17,6 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   const { page, min, max, category, title } = req.query;
-  console.log(req.query);
 
   // Set default options
   const options = {
@@ -47,6 +46,30 @@ router.get("/", (req, res) => {
   // If query string exists then set page to selected page
   if (category) {
     options.category = category;
+  }
+
+  productQueries
+    .getProducts(options)
+    .then((products) => {
+      res.json(products);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+router.get("/listing", (req, res) => {
+  const { page } = req.query;
+
+  // Set default options
+  const options = {
+    page: 0,
+    user_id: req.session.user_id,
+  };
+
+  // If query string exists then set page to selected page
+  if (page >= 0 || page) {
+    options.page = Number(page);
   }
 
   productQueries
@@ -193,6 +216,7 @@ router.put("/:id/sold", (req, res) => {
 router.post("/:id/favorite", (req, res) => {
   const userId = req.session["user_id"];
   const itemId = req.params.id;
+
   productQueries.checkFavorite(userId, itemId)
   .then(favorite => {
     if (favorite.rows[0].case === 'False') {

@@ -32,10 +32,9 @@ router.get("/listings", (req, res) => {
   getUserListings(userId)
     .then((listings) => {
       // res.render("listings") //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
-      res.json({listings});
+      res.send(listings);
     })
     .catch((err) => {
-      console.log("error", err)
       res.status(500).json({ error: err.message });
     });
 })
@@ -67,7 +66,6 @@ router.get("/:id/favorite", (req, res) => {
       res.json({favorites}); //SHOULD RENDER OUT A VIEW WHEN IT GETS MADE
     })
     .catch((err) => {
-      console.log("error", err)
       res.status(500).json({ error: err.message });
     });
 })
