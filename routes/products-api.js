@@ -51,7 +51,7 @@ router.get("/", (req, res) => {
   productQueries
     .getProducts(options)
     .then((products) => {
-      res.json({ products });
+      res.json(products);
     })
     .catch((err) => {
       res.status(500).json({ error: err.message });

@@ -5,8 +5,8 @@ $(document).ready(function () {
     query.title = `&title=${event.target.value}`;
 
     // After setting new queries, load new products
-    remountComponents();
-    $(window).on("scroll", listenScroll);
+    remountComponents("/api/products");
+    $(window).on("scroll", ()=> listenScroll("/api/products"));
   });
 
   // Filter form init
@@ -17,7 +17,7 @@ $(document).ready(function () {
     query.filters = `&${$(this).serialize()}`;
 
     // After seting up new queries, load new products
-    remountComponents();
+    remountComponents("/api/products");
   });
 
   // Check if logged in user is admin
@@ -27,5 +27,5 @@ $(document).ready(function () {
   });
 
   // Mount listener for scrolling
-  $(window).on("scroll", listenScroll);
+  $(window).on("scroll", () => listenScroll("/api/products"));
 });

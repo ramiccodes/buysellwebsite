@@ -37,16 +37,16 @@ const unmountComponents = () => {
 };
 
 // Remount all products by clearing children and requesting new products
-const remountComponents = () => {
+const remountComponents = (endpoint) => {
   unmountComponents();
-  loadProducts("/api/products");
+  loadProducts(endpoint);
 };
 
 // Listen to page scroll;
-const listenScroll = () => {
+const listenScroll = (endpoint) => {
   if ($(window).scrollTop() > $(document).height() - $(window).height() - 1) {
     query.nextPage();
-    loadProducts("/api/products");
+    loadProducts(endpoint);
   }
 };
 
@@ -69,9 +69,10 @@ const loadProducts = (endpoint) => {
     url: endpoint + query.concatenate(),
     method: "GET",
     dataType: "json",
-    success: function ({ products }) {
+    success: function (products) {
+      console.log(products);
       // If there are no more products, remove event listener for the window
-      if (products.length === 0) {
+      if (products.length < 20) {
         renderWarning("No more products to load");
 
         // Remove event listener when no more products
@@ -149,7 +150,7 @@ const createCardElement = function (product) {
       method: "PUT",
       dataType: "json",
       data: { is_sold: isSold },
-      success: function (response) {
+      success: function () {
         // Update the product's sold status
         product.is_sold = isSold;
 
