@@ -43,6 +43,7 @@ const s3ApiRoutes = require("./routes/s3-api");
 const productsApiRoutes = require("./routes/products-api");
 const usersApiRoutes = require("./routes/users-api");
 const productRoutes = require("./routes/product");
+const userRoutes = require("./routes/users");
 const onboardingRoutes = require("./routes/onboarding");
 
 // Mount all resource routes
@@ -53,8 +54,9 @@ app.use("/api/users", usersApiRoutes);
 app.use("/api/auth", authApiRoutes);
 app.use("/api/s3", s3ApiRoutes);
 app.use("/product", productRoutes);
-app.use("/", productRoutes);
+app.use("/user", userRoutes);
 app.use("/auth", onboardingRoutes);
+app.use("/", productRoutes);
 
 // Note: mount other resources here, using the same pattern above
 

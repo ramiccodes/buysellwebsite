@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
+
+    <!-- App JS -->
+    <script defer src="/scripts/app.js"></script>
+
+    <title>Home Page</title>
+    <%- include('partials/_meta') %>
+  </head>
+
+  <body>
+    <%- include('partials/_header') %>
+    <div class="d-flex flex-column gap-2 p-2">
+      <!-- Render product cards (sample placeholder) -->
+      <main>
+        <div class="container">
+          <div class="row">
+            <section id="products" class="cards"></section>
+            <div id="end-message"> </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

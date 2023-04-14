@@ -4,7 +4,7 @@ const db = require("../connection");
 const getProducts = (options) => {
   // Hard page limit per load
   const PAGE_LIMIT = 20;
-  const { page, min, max, category, title } = options;
+  const { page, min, max, category, title, user_id } = options;
 
   // Variables relating to querying by option provided
   let variableIndex = 1;
@@ -33,6 +33,16 @@ const getProducts = (options) => {
     isFirstQuery = false;
   }
 
+  // Filter by Price
+  if (user_id) {
+    params.push(max);
+    queryString += `${
+      isFirstQuery ? "WHERE" : "AND"
+    } user_id = $${variableIndex} `;
+    variableIndex++
+    isFirstQuery = false;
+  }
+
   // Filter by Category
   if (category) {
     console.log("Category", category);
@@ -53,7 +63,7 @@ const getProducts = (options) => {
   }
 
   return db.query(queryString, params).then((data) => {
-    console.log("run")
+    console.log("run");
     return data.rows;
   });
 };
