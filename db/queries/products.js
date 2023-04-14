@@ -53,6 +53,9 @@ const getProducts = (options) => {
     isFirstQuery = false;
   }
 
+  // Order by newest
+  queryString += " ORDER BY id DESC "
+
   // Limit per page
   if (page >= 0 || page) {
     params.push(page * 20);
