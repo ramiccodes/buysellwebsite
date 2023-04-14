@@ -186,7 +186,7 @@ router.post("/:id/favorite", (req, res) => {
   const itemId = req.params.id;
   productQueries.addFavorite(userId, itemId).then((product) => {
     console.log("Marked as Favorite");
-    res.redirect("/product");
+    
   });
 });
 

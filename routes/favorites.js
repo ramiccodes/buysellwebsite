@@ -8,11 +8,8 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/create", (req, res) => {
-  res.render("create", isLoggedIn);
+router.get("/", (req, res) => {
+  res.render("favorites");
 });
-
-
-
 
 module.exports = router;

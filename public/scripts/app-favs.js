@@ -5,7 +5,8 @@ let queryString =
 $(document).ready(function () {
   const loadProducts = () => {
     $.ajax({
-      url: `/api/products?page=${page}`,
+      url: `/api/users/favorites?page=${page}`,
+      
       method: "GET",
       dataType: "json",
       success: function (products) {
@@ -49,6 +50,7 @@ $(document).ready(function () {
   };
 
   const createCardElement = function (product) {
+    if (product.favorite === true) {
     let $card = $(`
     <div class="col-md-6 col-sm-12 col-lg-4">
       <div class="card-wrapper">
@@ -59,7 +61,6 @@ $(document).ready(function () {
               <img src="${product.img}" class="img-fluid ${product.is_sold ? "sold" : ""}">
               <h2 class="overlay-text">${product.is_sold ? "SOLD" : ""}</h2>
             </div>
-            </a>
             <button class="favorite-btn" data-id="${product.id}">
               <i class="fas fa-heart"></i>
             </button>
@@ -86,6 +87,7 @@ $(document).ready(function () {
       </div>
     </div>
     `);
+    
     
     // toggle sold button and call query
     $card.find(".sold-btn").on("click", function () {
@@ -135,31 +137,11 @@ $(document).ready(function () {
       });
     });
 
-    // add favorite
-
-    $card.find('.favorite-btn').on('click', function() {
-      const productId = product.id;
-      console.log(productId);
-      $.ajax({
-        url: `/api/products/${productId}/favorite`,
-        method: 'POST',
-        dataType: 'json',
-        success: function(response) {
-          console.log(productId);
-          
-        },
-        error: function(err) {
-          console.error('Error adding fav:', err);
-        }
-      });
-
-
+    $card.find(".favorite-btn").on("click", function () {
+      $card.remove();
     });
-
-
-
     
-
+    };
 
     return $card;
   };

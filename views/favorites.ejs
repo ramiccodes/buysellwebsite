@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="/styles/cards.css" type="text/css" />
+
+    <!-- App JS -->
+    <script defer src="/scripts/app-favs.js"></script>
+
+    <title>Favorites</title>
+    <%- include('partials/_meta') %>
+  </head>
+
+  <body>
+    <%- include('partials/_header') %>
+    <div class="d-flex flex-column gap-2 p-2">
+
+      <!-- Searchbar wrapper -->
+      <div class="w-100 d-flex align-items-center gap-3 pb-2">
+
+        <!-- Searchbar form -->
+        <form class="form-floating w-100">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for items"
+            />
+          </div>
+        </form>
+
+        <!-- Filter Dropdown button -->
+        <div class="btn-group">
+          <button
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#filter-form"
+            aria-controls="filter-form"
+            aria-expanded="false"
+            aria-label="Toggle filter form"
+            class="btn btn-primary dropdown-toggle"
+          >
+            <i class="fa-solid fa-filter"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter form, opens on filter btn press -->
+      <form
+        class="collapse rounded border-dark-subtle border border-1"
+        id="filter-form"
+      >
+        <div class="d-flex flex-column gap-2 p-3 m-0">
+
+          <!-- Filters by category -->
+            <select name="category" id="category" class=" form-select" aria-label="Select Category">
+              <option selected value="furnitures">Furniture</option>
+              <option value="electronics">Electronics</option>
+              <option value="toys">Toys</option>
+            </select>
+
+            <!-- Filters by Price (min, max) -->
+            <fieldset class="d-flex gap-2">
+              <div class="input-group col">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-dollar"></i>
+                </span>
+                <input
+                  id="price-min"
+                  type="text"
+                  name="min"
+                  class="form-control input-dark"
+                  placeholder="Min price"
+                />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text" >
+                  <i class="fa-solid fa-dollar"></i>
+                </span>
+                <input
+                  id="price-max"
+                  type="text"
+                  name="max"
+                  class="form-control"
+                  placeholder="Max price"
+                />
+              </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Filter</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Render product cards (sample placeholder) -->
+      <main>
+        <div class="container">
+          <div class="row">
+            <section class="cards"></section>
+            <div id="end-message"> </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
