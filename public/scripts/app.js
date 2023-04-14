@@ -27,8 +27,9 @@ $(document).ready(function () {
   });
 
   // Check if logged in user is admin
-  checkAdmin((res) => {
+  checkStatus((res) => {
     query.isAdmin = res.isAdmin;
+    query.isLoggedIn = res.isLoggedIn;
     loadProducts("/api/products");
   });
 
